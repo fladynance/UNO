@@ -3,586 +3,1192 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>El Duende — Ristorante Spagnolo a Roma, Rione Monti</title>
-<meta name="description" content="A due passi dai Fori, un angolo di Spagna che non recita una parte. Tapas, paella e jamón ibérico come li fanno in Andalusia. Prenota il tuo tavolo da El Duende.">
+<title>El Duende — Ristorante Spagnolo a Roma, dal 2003</title>
+<meta name="description" content="A cinque minuti dal Colosseo, un angolo di Siviglia dal 2003. Tapas, paella sul fuoco, jamón ibérico tagliato a mano. Prenota il tuo tavolo da El Duende.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=Inter:wght@300;400;500;600;700&family=Caveat:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,500;1,9..144,700&family=Inter:wght@300;400;500;600;700&family=Caveat:wght@500;700&display=swap">
 <style>
+/* ═══════════════════════════════════════════════════════════
+   TOKENS
+   ═══════════════════════════════════════════════════════════ */
 :root {
-  --paper:    #FAF3E7;
-  --paper-2:  #F2E6D0;
-  --ink:      #2A1E18;
-  --ink-2:    #4A382C;
-  --mute:     #7A6B5E;
-  --line:     #D4C4A8;
-  --terra:    #B13838;
-  --terra-d:  #8E2626;
-  --wine:     #4A1512;
-  --gold:     #C9843A;
-  --gold-l:   #E8A857;
-  --olive:    #6B6033;
-  --cream:    #FFFBF0;
-  --radius:   4px;
-  --head:     'Playfair Display', Georgia, serif;
-  --body:     'Inter', system-ui, sans-serif;
-  --hand:     'Caveat', cursive;
+  --black:    #0D0806;
+  --ink:      #1A110C;
+  --ink-2:    #2B1D14;
+  --wine:     #3A0F0B;
+  --wine-2:   #561814;
+  --terra:    #C84633;
+  --terra-d:  #9A2E1E;
+  --gold:     #D4A24C;
+  --gold-l:   #E8C081;
+  --gold-d:   #A77B2D;
+  --cream:    #F6ECD7;
+  --cream-2:  #ECDFC2;
+  --paper:    #F9F2E1;
+  --bone:     #FFF8E7;
+  --mute:     #8A7963;
+  --line:     rgba(26,17,12,.14);
+  --line-l:   rgba(246,236,215,.14);
+
+  --head:   'Fraunces', Georgia, serif;
+  --body:   'Inter', system-ui, sans-serif;
+  --hand:   'Caveat', cursive;
+
+  --easing: cubic-bezier(.2, .6, .2, 1);
   color-scheme: light;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/* ═══════════════════════════════════════════════════════════
+   RESET
+   ═══════════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
   font-family: var(--body);
-  background: var(--paper);
+  background: var(--cream);
   color: var(--ink);
   font-size: 17px;
-  line-height: 1.75;
+  line-height: 1.7;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
-a { color: inherit; text-decoration: none; }
+a { color: inherit; text-decoration: none; transition: color .2s var(--easing); }
 img, svg { display: block; max-width: 100%; }
 button { font-family: inherit; cursor: pointer; border: none; background: none; }
 p { margin-bottom: 1.1em; }
 p:last-child { margin-bottom: 0; }
 
-.wrap { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
-.narrow { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+::selection { background: var(--terra); color: var(--bone); }
 
-/* ───── NAV ─────────────────────────────────────────────── */
+/* paper grain texture */
+body::before {
+  content: "";
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .1 0 0 0 0 .07 0 0 0 0 .04 0 0 0 .035 0'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>");
+  pointer-events: none;
+  z-index: 100;
+  opacity: .5;
+  mix-blend-mode: multiply;
+}
+
+.wrap   { max-width: 1240px; margin: 0 auto; padding: 0 32px; }
+.narrow { max-width: 760px;  margin: 0 auto; padding: 0 32px; }
+.wide   { max-width: 1440px; margin: 0 auto; padding: 0 32px; }
+
+@media (max-width: 640px) {
+  .wrap, .narrow, .wide { padding: 0 20px; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TYPE PRIMITIVES
+   ═══════════════════════════════════════════════════════════ */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--terra);
+}
+.eyebrow::before, .eyebrow::after {
+  content: ""; height: 1px; width: 32px;
+  background: currentColor;
+  opacity: .5;
+}
+.eyebrow--left::after,
+.eyebrow--right::before { display: none; }
+
+.display {
+  font-family: var(--head);
+  font-weight: 400;
+  font-variation-settings: "opsz" 144, "wght" 400;
+  letter-spacing: -.028em;
+  line-height: .96;
+  color: var(--ink);
+}
+.display em {
+  font-style: italic;
+  font-weight: 300;
+  color: var(--terra);
+  font-variation-settings: "opsz" 144, "wght" 300;
+}
+.display--light em { color: var(--gold-l); }
+
+.hand {
+  font-family: var(--hand);
+  color: var(--gold-d);
+  font-weight: 500;
+  font-size: 1.4em;
+  line-height: 1;
+  display: inline-block;
+  transform: rotate(-3deg);
+}
+
+.rule {
+  width: 60px; height: 2px;
+  background: var(--terra);
+  margin: 0 auto;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   NAV
+   ═══════════════════════════════════════════════════════════ */
 .nav {
-  position: sticky; top: 0; z-index: 50;
-  background: rgba(250, 243, 231, .96);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid var(--line);
+  position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+  padding: 20px 0;
+  transition: all .35s var(--easing);
+}
+.nav.scrolled {
+  background: rgba(13, 8, 6, .92);
+  backdrop-filter: blur(14px);
+  padding: 14px 0;
+  box-shadow: 0 1px 0 rgba(246,236,215,.08);
 }
 .nav__inner {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 18px 24px; max-width: 1140px; margin: 0 auto;
+  max-width: 1440px; margin: 0 auto;
+  padding: 0 32px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 40px;
 }
-.brand {
+.nav__brand {
   display: flex; align-items: center; gap: 12px;
+  color: var(--bone);
   font-family: var(--head);
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: .01em;
+  font-weight: 500;
+  font-size: 20px;
+  letter-spacing: -.01em;
 }
-.brand__mark {
-  width: 38px; height: 38px;
+.nav__brand small {
+  display: block;
+  font-family: var(--body);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--gold-l);
+  margin-top: -2px;
+}
+.nav__mark {
+  width: 42px; height: 42px;
   background: var(--terra);
-  color: var(--cream);
+  color: var(--bone);
   border-radius: 50%;
   display: grid; place-items: center;
   font-family: var(--head);
-  font-weight: 900;
-  font-size: 18px;
+  font-weight: 600;
   font-style: italic;
-}
-.brand small {
-  display: block;
-  font-family: var(--body);
-  font-size: 10px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: .22em;
-  color: var(--terra);
-  margin-top: -4px;
+  font-size: 20px;
 }
 .nav__links {
-  display: flex; gap: 28px;
-  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  gap: 36px;
+  font-size: 13px;
   font-weight: 500;
-  color: var(--ink-2);
+  color: rgba(246,236,215,.85);
 }
-.nav__links a:hover { color: var(--terra); }
+.nav__links a:hover { color: var(--gold-l); }
+.nav__cta-wrap {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  align-items: center;
+}
+.nav__phone {
+  color: rgba(246,236,215,.7);
+  font-size: 13px;
+  font-weight: 500;
+}
 .nav__cta {
   background: var(--terra);
-  color: var(--cream);
-  padding: 10px 22px;
-  font-size: 13px;
+  color: var(--bone);
+  padding: 11px 22px;
+  font-size: 12px;
   font-weight: 600;
-  letter-spacing: .08em;
+  letter-spacing: .14em;
   text-transform: uppercase;
-  border-radius: var(--radius);
-  transition: background .18s ease;
+  border-radius: 2px;
+  transition: all .2s var(--easing);
+  border: 1px solid var(--terra);
 }
-.nav__cta:hover { background: var(--wine); }
-@media (max-width: 820px) {
+.nav__cta:hover { background: transparent; color: var(--bone); border-color: var(--bone); }
+.nav__burger {
+  display: none;
+  width: 40px; height: 40px;
+  color: var(--bone);
+}
+@media (max-width: 980px) {
   .nav__links { display: none; }
+  .nav__phone { display: none; }
+  .nav__inner { grid-template-columns: 1fr auto; }
 }
 
-/* ───── HERO ─────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════
+   HERO — cinematic dark
+   ═══════════════════════════════════════════════════════════ */
 .hero {
   position: relative;
-  padding: 90px 0 100px;
+  min-height: 100vh;
   background:
-    radial-gradient(ellipse at 70% 20%, rgba(201,132,58,.14), transparent 60%),
-    radial-gradient(ellipse at 10% 90%, rgba(177,56,56,.10), transparent 60%),
-    var(--paper);
+    radial-gradient(ellipse at 70% 30%, rgba(212,162,76,.22), transparent 55%),
+    radial-gradient(ellipse at 20% 90%, rgba(200,70,51,.18), transparent 60%),
+    linear-gradient(180deg, #0D0806 0%, #1A110C 60%, #2B1D14 100%);
+  color: var(--bone);
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  padding: 160px 0 100px;
 }
 .hero::before {
   content: "";
   position: absolute; inset: 0;
-  background-image:
-    radial-gradient(circle at 20% 30%, rgba(42,30,24,.03) 1px, transparent 1px),
-    radial-gradient(circle at 70% 60%, rgba(42,30,24,.03) 1px, transparent 1px);
-  background-size: 50px 50px, 70px 70px;
+  background:
+    repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(212,162,76,.015) 2px, rgba(212,162,76,.015) 4px);
   pointer-events: none;
 }
-.hero__grid {
+.hero::after {
+  content: "";
+  position: absolute;
+  bottom: -1px; left: 0; right: 0;
+  height: 100px;
+  background: linear-gradient(180deg, transparent, var(--cream));
+}
+
+.hero__layout {
   position: relative;
   display: grid;
-  grid-template-columns: 1.3fr .9fr;
+  grid-template-columns: 1fr .9fr;
   gap: 80px;
   align-items: center;
+  width: 100%;
 }
-.hero__kicker {
-  display: inline-flex; align-items: center; gap: 12px;
-  font-size: 12px;
+
+.hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px 8px 10px;
+  background: rgba(212,162,76,.1);
+  border: 1px solid rgba(212,162,76,.3);
+  border-radius: 100px;
+  font-size: 11px;
   font-weight: 600;
+  letter-spacing: .2em;
   text-transform: uppercase;
-  letter-spacing: .22em;
-  color: var(--terra);
+  color: var(--gold-l);
+  margin-bottom: 36px;
+}
+.hero__badge::before {
+  content: "";
+  width: 6px; height: 6px;
+  background: var(--gold-l);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--gold-l);
+  animation: pulse 1.8s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1}50%{opacity:.3} }
+
+.hero__title {
+  font-family: var(--head);
+  font-size: clamp(44px, 7vw, 108px);
+  font-weight: 300;
+  font-variation-settings: "opsz" 144, "wght" 300;
+  line-height: .95;
+  letter-spacing: -.03em;
+  color: var(--bone);
   margin-bottom: 32px;
 }
-.hero__kicker::before, .hero__kicker::after {
-  content: ""; width: 24px; height: 1px; background: var(--terra);
-}
-.hero h1 {
-  font-family: var(--head);
-  font-size: clamp(42px, 5.5vw, 76px);
-  line-height: 1.04;
-  font-weight: 700;
-  letter-spacing: -.015em;
-  margin-bottom: 28px;
-  color: var(--ink);
-}
-.hero h1 em {
+.hero__title em {
   font-style: italic;
-  color: var(--terra);
+  color: var(--gold-l);
+  font-weight: 300;
+  position: relative;
+}
+.hero__title em::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 4px;
+  height: 2px;
+  background: var(--gold);
+  opacity: .5;
+}
+.hero__title .big {
+  display: block;
+  font-weight: 500;
+  font-variation-settings: "opsz" 144, "wght" 500;
+  color: var(--bone);
+}
+
+.hero__lead {
+  font-size: 20px;
+  line-height: 1.6;
+  color: rgba(246,236,215,.78);
+  max-width: 520px;
+  margin-bottom: 44px;
+  font-weight: 300;
+}
+.hero__lead strong {
+  color: var(--bone);
   font-weight: 500;
 }
-.hero__lead {
-  font-size: 19px;
-  line-height: 1.65;
-  color: var(--ink-2);
-  max-width: 540px;
-  margin-bottom: 40px;
-}
-.hero__cta {
-  display: flex; gap: 16px; flex-wrap: wrap; align-items: center;
+
+.hero__ctas {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  align-items: center;
 }
 .btn {
-  display: inline-flex; align-items: center; gap: 10px;
-  padding: 16px 32px;
-  border-radius: var(--radius);
-  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 32px;
+  font-size: 13px;
   font-weight: 600;
-  letter-spacing: .1em;
+  letter-spacing: .18em;
   text-transform: uppercase;
-  transition: all .2s ease;
+  border-radius: 2px;
   border: 1px solid transparent;
+  transition: all .25s var(--easing);
+  position: relative;
+  overflow: hidden;
 }
+.btn svg { width: 16px; height: 16px; transition: transform .25s var(--easing); }
+.btn:hover svg { transform: translateX(4px); }
+
+.btn--gold {
+  background: var(--gold);
+  color: var(--ink);
+  border-color: var(--gold);
+}
+.btn--gold:hover { background: var(--gold-l); border-color: var(--gold-l); }
+
 .btn--primary {
-  background: var(--terra); color: var(--cream);
+  background: var(--terra);
+  color: var(--bone);
   border-color: var(--terra);
 }
-.btn--primary:hover { background: var(--wine); border-color: var(--wine); }
-.btn--outline {
+.btn--primary:hover { background: var(--terra-d); border-color: var(--terra-d); }
+
+.btn--ghost-light {
+  background: transparent;
+  color: var(--bone);
+  border-color: rgba(246,236,215,.3);
+}
+.btn--ghost-light:hover { border-color: var(--bone); background: rgba(246,236,215,.06); }
+
+.btn--ghost-dark {
   background: transparent;
   color: var(--ink);
   border-color: var(--ink);
 }
-.btn--outline:hover { background: var(--ink); color: var(--cream); }
-.btn svg { width: 16px; height: 16px; }
+.btn--ghost-dark:hover { background: var(--ink); color: var(--bone); }
 
-.hero__phone {
-  margin-top: 36px;
-  padding-top: 32px;
-  border-top: 1px solid var(--line);
-  display: flex; gap: 32px; align-items: center;
-  color: var(--mute);
-  font-size: 14px;
+.hero__meta {
+  margin-top: 72px;
+  padding-top: 40px;
+  border-top: 1px solid rgba(246,236,215,.15);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
 }
-.hero__phone strong {
+.hero__meta div { }
+.hero__meta b {
   display: block;
   font-family: var(--head);
-  font-size: 22px;
-  color: var(--ink);
-  font-weight: 700;
-  margin-bottom: 2px;
+  font-size: 32px;
+  font-weight: 500;
+  font-variation-settings: "opsz" 144, "wght" 500;
+  color: var(--gold-l);
+  line-height: 1;
+  margin-bottom: 8px;
+  letter-spacing: -.02em;
+}
+.hero__meta span {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: rgba(246,236,215,.5);
+  line-height: 1.4;
 }
 
-/* Hero visual */
+/* HERO VISUAL */
 .hero__visual {
   position: relative;
   aspect-ratio: 4 / 5;
 }
-.hero__frame {
+.hero__plate {
   position: absolute; inset: 0;
-  background: linear-gradient(145deg, var(--wine) 0%, var(--terra) 60%, var(--gold) 100%);
-  border-radius: var(--radius);
+  border-radius: 4px;
   overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(212,162,76,.25) 0%, transparent 70%),
+    linear-gradient(160deg, #561814 0%, #3A0F0B 50%, #1A110C 100%);
+  border: 1px solid rgba(212,162,76,.2);
   box-shadow:
-    30px 30px 0 -8px var(--paper-2),
-    30px 30px 0 -6px var(--line);
+    0 40px 100px rgba(0,0,0,.5),
+    inset 0 1px 0 rgba(246,236,215,.08);
 }
-.hero__frame svg {
+.hero__plate::before {
+  content: "";
+  position: absolute; inset: 0;
+  background:
+    repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(246,236,215,.015) 3px, rgba(246,236,215,.015) 4px);
+}
+.hero__plate svg {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
 }
-.hero__stamp {
+.hero__corner-tr, .hero__corner-bl {
   position: absolute;
-  bottom: -24px; left: -24px;
-  width: 150px; height: 150px;
-  background: var(--paper);
-  border: 1px solid var(--line);
+  width: 48px; height: 48px;
+  border-color: var(--gold-l);
+  border-style: solid;
+  border-width: 0;
+}
+.hero__corner-tr { top: 24px; right: 24px; border-top-width: 1px; border-right-width: 1px; }
+.hero__corner-bl { bottom: 24px; left: 24px; border-bottom-width: 1px; border-left-width: 1px; }
+
+.hero__caption {
+  position: absolute;
+  top: 24px; left: 24px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--gold-l);
+  opacity: .9;
+}
+.hero__caption-bottom {
+  position: absolute;
+  bottom: 32px; right: 32px;
+  text-align: right;
+  font-family: var(--head);
+  font-style: italic;
+  color: var(--bone);
+}
+.hero__caption-bottom b {
+  display: block;
+  font-size: 24px;
+  font-weight: 500;
+  font-style: italic;
+  margin-bottom: 2px;
+  color: var(--gold-l);
+}
+.hero__caption-bottom span {
+  font-family: var(--body);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: rgba(246,236,215,.6);
+  font-style: normal;
+}
+
+.hero__sticker {
+  position: absolute;
+  bottom: -36px; left: -36px;
+  width: 160px; height: 160px;
+  background: var(--gold);
+  color: var(--ink);
   border-radius: 50%;
   display: grid; place-items: center;
   text-align: center;
+  padding: 20px;
+  transform: rotate(-10deg);
+  box-shadow: 0 20px 60px rgba(0,0,0,.3);
   font-family: var(--head);
   font-style: italic;
-  font-size: 14px;
-  color: var(--ink);
-  line-height: 1.3;
-  padding: 18px;
-  transform: rotate(-8deg);
-  box-shadow: 0 10px 30px rgba(42,30,24,.08);
+  z-index: 2;
 }
-.hero__stamp b {
+.hero__sticker span { font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; font-style: normal; }
+.hero__sticker b {
   display: block;
   font-family: var(--head);
-  font-weight: 900;
-  font-size: 28px;
-  color: var(--terra);
+  font-size: 44px;
+  font-weight: 500;
+  font-style: italic;
   line-height: 1;
-  margin: 4px 0;
+  margin: 6px 0;
+  letter-spacing: -.02em;
 }
 
-@media (max-width: 820px) {
-  .hero { padding: 50px 0 60px; }
-  .hero__grid { grid-template-columns: 1fr; gap: 50px; }
-  .hero__visual { max-width: 380px; margin: 0 auto; aspect-ratio: 4/4; }
+@media (max-width: 980px) {
+  .hero { min-height: auto; padding: 130px 0 80px; }
+  .hero__layout { grid-template-columns: 1fr; gap: 60px; }
+  .hero__meta { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .hero__title { font-size: clamp(42px, 11vw, 72px); }
+  .hero__visual { max-width: 420px; margin: 0 auto; aspect-ratio: 1 / 1; }
+  .hero__sticker { width: 120px; height: 120px; bottom: -20px; left: -20px; }
+  .hero__sticker b { font-size: 32px; }
 }
 
-/* ───── TICKER ───────────────────────────────────────────── */
-.strip {
-  background: var(--wine);
-  color: var(--cream);
-  padding: 20px 0;
+/* ═══════════════════════════════════════════════════════════
+   MARQUEE
+   ═══════════════════════════════════════════════════════════ */
+.marquee {
+  background: var(--ink);
+  color: var(--gold-l);
+  padding: 26px 0;
   overflow: hidden;
-  border-top: 1px solid var(--terra-d);
-  border-bottom: 1px solid var(--terra-d);
+  border-top: 1px solid var(--gold-d);
+  border-bottom: 1px solid var(--gold-d);
 }
-.strip__track {
-  display: flex; gap: 50px;
+.marquee__track {
+  display: flex;
+  gap: 60px;
   white-space: nowrap;
   font-family: var(--head);
   font-style: italic;
-  font-size: 22px;
-  animation: slide 32s linear infinite;
+  font-size: 28px;
+  font-weight: 400;
+  animation: slide 38s linear infinite;
+  letter-spacing: -.01em;
 }
-.strip__track span { display: inline-flex; align-items: center; gap: 50px; }
-.strip__track em { font-style: normal; color: var(--gold-l); margin: 0 20px; }
+.marquee__track span { display: inline-flex; align-items: center; gap: 60px; }
+.marquee__track em {
+  font-style: normal;
+  color: var(--terra);
+  font-size: 20px;
+}
 @keyframes slide { to { transform: translateX(-50%); } }
 
-/* ───── SECTION FRAME ────────────────────────────────────── */
-section.block {
-  padding: 110px 0;
-  position: relative;
-}
-.block + .block { border-top: 1px solid var(--line); }
-.block__head {
+/* ═══════════════════════════════════════════════════════════
+   PROLOGO — short intro vignette
+   ═══════════════════════════════════════════════════════════ */
+.prologo {
+  padding: 140px 0 120px;
+  background: var(--cream);
   text-align: center;
-  margin-bottom: 60px;
-  max-width: 740px;
-  margin-left: auto; margin-right: auto;
-  padding: 0 24px;
 }
-.block__eyebrow {
-  display: inline-block;
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: .24em;
-  color: var(--terra);
+.prologo .hand {
   margin-bottom: 20px;
-  position: relative;
-  padding: 0 32px;
+  font-size: 42px;
 }
-.block__eyebrow::before, .block__eyebrow::after {
-  content: ""; position: absolute; top: 50%;
-  width: 20px; height: 1px; background: var(--terra);
-}
-.block__eyebrow::before { left: 0; }
-.block__eyebrow::after { right: 0; }
-.block__title {
+.prologo h2 {
   font-family: var(--head);
   font-size: clamp(32px, 4.5vw, 54px);
-  line-height: 1.1;
-  font-weight: 700;
-  letter-spacing: -.01em;
+  font-weight: 300;
+  font-variation-settings: "opsz" 144, "wght" 300;
+  line-height: 1.15;
+  letter-spacing: -.02em;
+  max-width: 820px;
+  margin: 0 auto 32px;
   color: var(--ink);
-  margin-bottom: 20px;
 }
-.block__title em { font-style: italic; color: var(--terra); font-weight: 500; }
-.block__sub {
-  font-family: var(--hand);
-  font-size: 32px;
-  color: var(--gold);
-  transform: rotate(-2deg);
-  display: inline-block;
-}
-
-/* ───── STORIA ──────────────────────────────────────────── */
-.story__body {
-  font-size: 19px;
-  line-height: 1.8;
-  color: var(--ink-2);
-}
-.story__body p:first-of-type::first-letter {
-  font-family: var(--head);
-  font-size: 72px;
-  font-weight: 900;
+.prologo h2 em {
+  font-style: italic;
   color: var(--terra);
-  float: left;
-  line-height: .9;
-  padding-right: 14px;
-  padding-top: 6px;
-  font-style: italic;
+  font-weight: 400;
 }
-.story__body p + p { text-indent: 1.6em; }
-
-.story__quote {
-  margin: 48px 0;
-  padding: 32px 40px;
-  background: var(--paper-2);
-  border-left: 4px solid var(--terra);
-  font-family: var(--head);
-  font-style: italic;
-  font-size: 24px;
-  line-height: 1.5;
-  color: var(--wine);
+.prologo__sig {
+  margin-top: 48px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
-.story__quote cite {
-  display: block;
-  margin-top: 14px;
-  font-family: var(--body);
-  font-style: normal;
-  font-size: 13px;
-  font-weight: 600;
+.prologo__sig svg { height: 48px; color: var(--terra); }
+.prologo__sig span {
+  font-size: 11px;
+  letter-spacing: .3em;
   text-transform: uppercase;
-  letter-spacing: .12em;
   color: var(--mute);
 }
 
-/* ───── MENU (narrative) ─────────────────────────────────── */
-.menu {
+/* ═══════════════════════════════════════════════════════════
+   SECTION — generic
+   ═══════════════════════════════════════════════════════════ */
+section.block { padding: 140px 0; position: relative; }
+section.block + section.block { border-top: 1px solid var(--line); }
+
+.section__head {
+  text-align: center;
+  margin-bottom: 90px;
+  max-width: 800px;
+  margin-left: auto; margin-right: auto;
+  padding: 0 24px;
+}
+.section__head .eyebrow { margin-bottom: 24px; }
+.section__head h2 {
+  font-family: var(--head);
+  font-size: clamp(36px, 5vw, 68px);
+  font-weight: 300;
+  font-variation-settings: "opsz" 144, "wght" 300;
+  line-height: 1.05;
+  letter-spacing: -.02em;
+  color: var(--ink);
+}
+.section__head h2 em {
+  font-style: italic;
+  color: var(--terra);
+  font-weight: 400;
+}
+.section__head .hand {
+  margin-top: 16px;
+  font-size: 32px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   STORIA
+   ═══════════════════════════════════════════════════════════ */
+.storia {
+  background: var(--cream);
+  position: relative;
+}
+.storia__layout {
+  display: grid;
+  grid-template-columns: .9fr 1fr;
+  gap: 100px;
+  align-items: center;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+.storia__image {
+  position: relative;
+  aspect-ratio: 4 / 5;
+}
+.storia__frame {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(160deg, var(--wine-2), var(--wine) 50%, var(--ink));
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow:
+    30px 30px 0 -8px var(--terra),
+    0 40px 80px rgba(26,17,12,.15);
+}
+.storia__frame svg {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+}
+.storia__frame::after {
+  content: "";
+  position: absolute; inset: 20px;
+  border: 1px solid rgba(246,236,215,.15);
+  pointer-events: none;
+}
+.storia__badge {
+  position: absolute;
+  top: -20px; left: -20px;
+  background: var(--terra);
+  color: var(--bone);
+  padding: 14px 24px;
+  font-family: var(--head);
+  font-style: italic;
+  font-size: 18px;
+  font-weight: 500;
+  border-radius: 2px;
+  z-index: 2;
+  box-shadow: 0 10px 30px rgba(58,15,11,.3);
+}
+
+.storia__body { }
+.storia__body .eyebrow { margin-bottom: 20px; }
+.storia__body h2 {
+  font-family: var(--head);
+  font-size: clamp(36px, 4.5vw, 62px);
+  font-weight: 300;
+  font-variation-settings: "opsz" 144, "wght" 300;
+  line-height: 1.05;
+  letter-spacing: -.025em;
+  margin-bottom: 36px;
+  color: var(--ink);
+}
+.storia__body h2 em {
+  font-style: italic;
+  color: var(--terra);
+  font-weight: 400;
+}
+.storia__body p {
+  font-size: 18px;
+  line-height: 1.8;
+  color: var(--ink-2);
+  margin-bottom: 20px;
+}
+.storia__body p:first-of-type { font-size: 20px; color: var(--ink); font-weight: 400; }
+
+.storia__quote {
+  margin: 44px 0;
+  padding-left: 32px;
+  border-left: 3px solid var(--terra);
+  font-family: var(--head);
+  font-style: italic;
+  font-size: 26px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--wine);
+}
+.storia__quote cite {
+  display: block;
+  margin-top: 18px;
+  font-family: var(--body);
+  font-style: normal;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+
+@media (max-width: 900px) {
+  .storia__layout { grid-template-columns: 1fr; gap: 70px; }
+  .storia__image { max-width: 480px; margin: 0 auto; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SIGNATURE DISHES — big featured cards
+   ═══════════════════════════════════════════════════════════ */
+.signature {
+  background: var(--bone);
+  position: relative;
+}
+.signature__list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 36px;
+}
+.dish {
+  background: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: transform .35s var(--easing), box-shadow .35s var(--easing);
+  display: flex;
+  flex-direction: column;
+}
+.dish:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 30px 80px rgba(26,17,12,.12);
+}
+.dish__visual {
+  aspect-ratio: 4/3;
+  background: linear-gradient(145deg, var(--wine-2), var(--wine));
+  position: relative;
+  overflow: hidden;
+}
+.dish__visual svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.dish__num {
+  position: absolute;
+  top: 20px; left: 24px;
+  font-family: var(--head);
+  font-style: italic;
+  font-size: 56px;
+  font-weight: 300;
+  color: var(--gold-l);
+  opacity: .85;
+  line-height: 1;
+  z-index: 2;
+}
+.dish__tag {
+  position: absolute;
+  top: 24px; right: 24px;
+  background: var(--gold);
+  color: var(--ink);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  border-radius: 100px;
+  z-index: 2;
+}
+.dish__body { padding: 36px; }
+.dish__kicker {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--terra);
+  margin-bottom: 12px;
+}
+.dish h3 {
+  font-family: var(--head);
+  font-size: 28px;
+  font-weight: 400;
+  font-variation-settings: "opsz" 144, "wght" 400;
+  line-height: 1.15;
+  color: var(--ink);
+  margin-bottom: 16px;
+  letter-spacing: -.01em;
+}
+.dish p {
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--ink-2);
+}
+
+@media (max-width: 980px) {
+  .signature__list { grid-template-columns: 1fr; gap: 24px; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CUCINA — narrative + plate menu
+   ═══════════════════════════════════════════════════════════ */
+.cucina {
   background: var(--cream);
 }
-.menu__cols {
+.cucina__layout {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.1fr .9fr;
   gap: 80px;
   align-items: start;
 }
-.menu__text {
+.cucina__text {
   font-size: 18px;
-  line-height: 1.78;
+  line-height: 1.85;
   color: var(--ink-2);
 }
-.menu__text h3 {
+.cucina__text p { margin-bottom: 24px; }
+.cucina__text p:first-of-type::first-letter {
   font-family: var(--head);
-  font-size: 26px;
-  font-weight: 700;
+  font-size: 86px;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--terra);
+  float: left;
+  line-height: .85;
+  padding-right: 16px;
+  padding-top: 8px;
+  font-variation-settings: "opsz" 144, "wght" 500;
+}
+.cucina__text h3 {
+  font-family: var(--head);
+  font-size: 28px;
+  font-weight: 400;
+  font-style: italic;
   color: var(--ink);
-  margin: 32px 0 14px;
-  font-style: italic;
+  margin: 44px 0 16px;
+  letter-spacing: -.01em;
 }
-.menu__text h3:first-child { margin-top: 0; }
-.menu__text strong {
-  color: var(--terra);
-  font-weight: 600;
-}
+.cucina__text strong { color: var(--terra); font-weight: 600; }
 
-.menu__plate {
-  position: sticky; top: 100px;
-  background: var(--paper);
-  border: 1px solid var(--line);
-  padding: 36px;
-  border-radius: var(--radius);
+.plate {
+  background: var(--ink);
+  color: var(--bone);
+  padding: 44px 36px;
+  border-radius: 4px;
+  position: sticky;
+  top: 110px;
+  box-shadow: 0 30px 80px rgba(26,17,12,.2);
 }
-.menu__plate h4 {
+.plate__head {
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(246,236,215,.15);
+  margin-bottom: 24px;
+  text-align: center;
+}
+.plate__head small {
+  display: block;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--gold-l);
+  margin-bottom: 10px;
+}
+.plate__head h4 {
   font-family: var(--head);
   font-style: italic;
-  font-size: 20px;
-  color: var(--terra);
-  margin-bottom: 20px;
-  font-weight: 500;
+  font-size: 26px;
+  font-weight: 400;
+  color: var(--bone);
 }
 .plate__item {
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 16px;
-  padding: 16px 0;
-  border-bottom: 1px dashed var(--line);
+  gap: 20px;
+  padding: 18px 0;
+  border-bottom: 1px dashed rgba(246,236,215,.1);
 }
-.plate__item:last-child { border-bottom: none; }
+.plate__item:last-child { border-bottom: none; padding-bottom: 0; }
 .plate__item h5 {
   font-family: var(--head);
   font-size: 17px;
-  font-weight: 700;
-  color: var(--ink);
+  font-weight: 500;
+  color: var(--bone);
   margin-bottom: 4px;
+  letter-spacing: -.005em;
 }
 .plate__item p {
-  font-size: 13px;
-  color: var(--mute);
+  font-size: 12px;
+  color: rgba(246,236,215,.55);
   margin: 0;
   line-height: 1.5;
 }
 .plate__price {
   font-family: var(--head);
-  font-weight: 700;
-  color: var(--terra);
-  font-size: 16px;
+  font-weight: 500;
+  color: var(--gold-l);
+  font-size: 18px;
   white-space: nowrap;
+  font-variation-settings: "opsz" 144, "wght" 500;
+}
+.plate__foot {
+  padding-top: 24px;
+  margin-top: 24px;
+  border-top: 1px solid rgba(246,236,215,.15);
+  font-size: 12px;
+  color: rgba(246,236,215,.6);
+  text-align: center;
+  line-height: 1.6;
+}
+.plate__foot b { color: var(--gold-l); font-weight: 600; }
+
+@media (max-width: 980px) {
+  .cucina__layout { grid-template-columns: 1fr; gap: 50px; }
+  .plate { position: static; padding: 32px 24px; }
 }
 
-@media (max-width: 900px) {
-  .menu__cols { grid-template-columns: 1fr; gap: 50px; }
-  .menu__plate { position: static; }
-}
-
-/* ───── AMBIENTE ─────────────────────────────────────────── */
-.ambient {
-  background: var(--wine);
-  color: var(--cream);
+/* ═══════════════════════════════════════════════════════════
+   AMBIENTE — immersive dark
+   ═══════════════════════════════════════════════════════════ */
+.ambiente {
+  background:
+    radial-gradient(ellipse at 20% 20%, rgba(212,162,76,.14), transparent 55%),
+    radial-gradient(ellipse at 80% 80%, rgba(200,70,51,.15), transparent 55%),
+    linear-gradient(180deg, #1A110C, #2B1D14, #1A110C);
+  color: var(--bone);
+  padding: 160px 0 140px;
   position: relative;
   overflow: hidden;
 }
-.ambient::before {
-  content: "";
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(circle at 80% 10%, rgba(201,132,58,.2), transparent 50%),
-    radial-gradient(circle at 10% 90%, rgba(232,168,87,.15), transparent 50%);
-}
-.ambient__inner { position: relative; }
-.ambient .block__title { color: var(--cream); }
-.ambient .block__title em { color: var(--gold-l); }
-.ambient .block__eyebrow { color: var(--gold-l); }
-.ambient .block__eyebrow::before,
-.ambient .block__eyebrow::after { background: var(--gold-l); }
-.ambient__text {
-  font-size: 20px;
-  line-height: 1.75;
-  color: rgba(255,251,240,.9);
-  max-width: 720px;
+.ambiente .section__head h2 { color: var(--bone); }
+.ambiente .section__head h2 em { color: var(--gold-l); }
+.ambiente .eyebrow { color: var(--gold-l); }
+
+.ambiente__text {
+  font-size: 22px;
+  line-height: 1.65;
+  color: rgba(246,236,215,.85);
+  max-width: 780px;
   margin: 0 auto;
+  text-align: center;
+  font-weight: 300;
 }
-.ambient__text p { margin-bottom: 1.3em; }
-.ambient__pulls {
-  margin-top: 60px;
+.ambiente__text p { margin-bottom: 1.4em; }
+.ambiente__text em {
+  font-style: italic;
+  color: var(--gold-l);
+}
+.ambiente__text strong {
+  color: var(--bone);
+  font-weight: 500;
+}
+
+.ambiente__pulls {
+  margin-top: 80px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  gap: 32px;
 }
 .pull {
-  padding: 32px 28px;
-  background: rgba(255,251,240,.06);
-  border: 1px solid rgba(232,168,87,.3);
-  border-radius: var(--radius);
+  padding: 44px 32px 36px;
+  background: rgba(246,236,215,.04);
+  border: 1px solid rgba(212,162,76,.2);
+  border-radius: 4px;
+  text-align: center;
+  position: relative;
+  transition: all .3s var(--easing);
 }
-.pull__num {
+.pull:hover {
+  background: rgba(246,236,215,.07);
+  border-color: var(--gold);
+  transform: translateY(-4px);
+}
+.pull__fig {
   font-family: var(--head);
   font-style: italic;
-  font-size: 48px;
+  font-size: 72px;
+  font-weight: 300;
   color: var(--gold-l);
-  font-weight: 500;
-  line-height: 1;
+  line-height: .9;
   margin-bottom: 14px;
+  letter-spacing: -.02em;
 }
 .pull h4 {
   font-family: var(--head);
-  font-size: 18px;
-  color: var(--cream);
-  margin-bottom: 8px;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--bone);
+  margin-bottom: 10px;
+  letter-spacing: -.01em;
 }
 .pull p {
   font-size: 14px;
-  color: rgba(255,251,240,.75);
+  color: rgba(246,236,215,.65);
   line-height: 1.6;
 }
+
 @media (max-width: 820px) {
-  .ambient__pulls { grid-template-columns: 1fr; }
+  .ambiente__pulls { grid-template-columns: 1fr; }
 }
 
-/* ───── REASONS ──────────────────────────────────────────── */
-.reasons__body {
-  font-size: 19px;
-  line-height: 1.78;
-  color: var(--ink-2);
-  margin-bottom: 50px;
-}
-.reasons__list {
-  display: grid;
-  gap: 36px;
-}
-.reason {
-  display: grid;
-  grid-template-columns: 72px 1fr;
-  gap: 32px;
-  padding-bottom: 36px;
+/* ═══════════════════════════════════════════════════════════
+   PRESS BAR
+   ═══════════════════════════════════════════════════════════ */
+.press {
+  padding: 60px 0;
+  background: var(--bone);
+  border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
 }
+.press__inner {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 60px;
+  align-items: center;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+.press__label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--mute);
+  max-width: 160px;
+  line-height: 1.6;
+  text-align: right;
+  padding-right: 32px;
+  border-right: 1px solid var(--line);
+}
+.press__logos {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+  font-family: var(--head);
+  font-style: italic;
+  font-size: 20px;
+  color: var(--ink-2);
+  opacity: .7;
+  flex-wrap: wrap;
+}
+.press__logos span { font-weight: 400; letter-spacing: -.01em; }
+
+@media (max-width: 820px) {
+  .press__inner { grid-template-columns: 1fr; gap: 24px; }
+  .press__label { text-align: center; border-right: none; border-bottom: 1px solid var(--line); padding: 0 0 20px; max-width: none; }
+  .press__logos { justify-content: center; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   REASONS
+   ═══════════════════════════════════════════════════════════ */
+.reasons {
+  background: var(--cream);
+}
+.reasons__intro {
+  font-size: 20px;
+  line-height: 1.7;
+  color: var(--ink-2);
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto 80px;
+}
+.reasons__list { display: grid; gap: 2px; }
+.reason {
+  display: grid;
+  grid-template-columns: 100px 1fr auto;
+  gap: 48px;
+  align-items: center;
+  padding: 44px 0;
+  border-bottom: 1px solid var(--line);
+  position: relative;
+  transition: all .3s var(--easing);
+}
 .reason:last-child { border-bottom: none; }
+.reason:hover { padding-left: 20px; }
+.reason:hover .reason__num { color: var(--terra); }
 .reason__num {
   font-family: var(--head);
   font-style: italic;
-  font-size: 56px;
-  color: var(--terra);
-  font-weight: 500;
-  line-height: .9;
+  font-size: 72px;
+  font-weight: 300;
+  color: var(--line);
+  line-height: 1;
+  letter-spacing: -.02em;
+  transition: color .3s var(--easing);
 }
-.reason h3 {
+.reason__body h3 {
   font-family: var(--head);
-  font-size: 22px;
-  font-weight: 700;
+  font-size: 28px;
+  font-weight: 400;
   color: var(--ink);
   margin-bottom: 10px;
+  letter-spacing: -.01em;
+  font-variation-settings: "opsz" 144, "wght" 400;
 }
-.reason p {
+.reason__body p {
   font-size: 17px;
-  line-height: 1.7;
+  line-height: 1.65;
   color: var(--ink-2);
   margin: 0;
 }
-
-/* ───── VOICES ───────────────────────────────────────────── */
-.voices {
-  background: var(--cream);
+.reason__arrow {
+  color: var(--line);
+  transition: color .3s var(--easing);
 }
-.voices__list {
+.reason:hover .reason__arrow { color: var(--terra); }
+.reason__arrow svg { width: 32px; height: 32px; }
+
+@media (max-width: 820px) {
+  .reason { grid-template-columns: 80px 1fr; gap: 24px; padding: 32px 0; }
+  .reason__num { font-size: 56px; }
+  .reason__arrow { display: none; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   VOICES
+   ═══════════════════════════════════════════════════════════ */
+.voices {
+  background: var(--bone);
+}
+.voices__grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 32px;
 }
 .voice {
-  padding: 36px 30px;
-  background: var(--paper);
+  padding: 44px 36px;
+  background: var(--cream);
   border: 1px solid var(--line);
-  border-radius: var(--radius);
+  border-radius: 4px;
   position: relative;
+  transition: transform .3s var(--easing), box-shadow .3s var(--easing);
+}
+.voice:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 30px 80px rgba(26,17,12,.1);
+}
+.voice::before {
+  content: "\201C";
+  position: absolute;
+  top: -8px; left: 32px;
+  font-family: var(--head);
+  font-size: 120px;
+  font-style: italic;
+  color: var(--terra);
+  line-height: 1;
+  opacity: .5;
 }
 .voice__stars {
   color: var(--gold);
-  letter-spacing: 3px;
-  margin-bottom: 18px;
+  letter-spacing: 4px;
+  margin-bottom: 20px;
   font-size: 14px;
+  position: relative;
 }
 .voice p {
   font-family: var(--head);
@@ -590,12 +1196,27 @@ section.block {
   font-size: 18px;
   line-height: 1.55;
   color: var(--ink);
-  margin-bottom: 24px;
+  margin-bottom: 28px;
+  font-weight: 400;
 }
 .voice__who {
-  display: flex; align-items: center; gap: 14px;
-  padding-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-top: 24px;
   border-top: 1px solid var(--line);
+}
+.voice__avatar {
+  width: 44px; height: 44px;
+  background: var(--terra);
+  color: var(--bone);
+  border-radius: 50%;
+  display: grid; place-items: center;
+  font-family: var(--head);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 18px;
+  flex-shrink: 0;
 }
 .voice__who b {
   display: block;
@@ -603,222 +1224,327 @@ section.block {
   font-size: 14px;
   font-weight: 600;
   color: var(--ink);
-  margin-bottom: 2px;
 }
 .voice__who span {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--mute);
+  letter-spacing: .12em;
   text-transform: uppercase;
-  letter-spacing: .08em;
-}
-.voice__who svg {
-  width: 20px; height: 20px;
-  flex-shrink: 0;
-  color: var(--terra);
-}
-@media (max-width: 820px) {
-  .voices__list { grid-template-columns: 1fr; }
 }
 
-/* ───── BOOK ─────────────────────────────────────────────── */
-.book {
-  background:
-    linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
-  padding: 110px 0;
+@media (max-width: 820px) {
+  .voices__grid { grid-template-columns: 1fr; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SERATA — cinematic narrative
+   ═══════════════════════════════════════════════════════════ */
+.serata {
+  background: var(--wine);
+  color: var(--bone);
+  padding: 180px 0;
   position: relative;
   overflow: hidden;
 }
-.book__inner {
-  display: grid;
-  grid-template-columns: 1.1fr .9fr;
-  gap: 70px;
-  align-items: center;
+.serata::before {
+  content: "";
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 70% 30%, rgba(212,162,76,.18), transparent 55%),
+    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(246,236,215,.015) 2px, rgba(246,236,215,.015) 4px);
+  pointer-events: none;
 }
-.book__title {
+.serata__inner {
+  position: relative;
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+.serata .hand { color: var(--gold-l); margin-bottom: 24px; }
+.serata h2 {
   font-family: var(--head);
-  font-size: clamp(36px, 5vw, 58px);
-  line-height: 1.05;
-  font-weight: 700;
-  color: var(--ink);
-  margin-bottom: 24px;
-  letter-spacing: -.01em;
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 300;
+  font-variation-settings: "opsz" 144, "wght" 300;
+  line-height: 1.1;
+  letter-spacing: -.025em;
+  color: var(--bone);
+  margin-bottom: 48px;
+  text-align: center;
 }
-.book__title em { font-style: italic; color: var(--terra); font-weight: 500; }
-.book__text {
+.serata h2 em { font-style: italic; color: var(--gold-l); }
+.serata__script {
+  font-size: 20px;
+  line-height: 1.85;
+  color: rgba(246,236,215,.85);
+  font-weight: 300;
+}
+.serata__script p { margin-bottom: 1.4em; }
+.serata__script p:nth-child(odd) { padding-left: 32px; border-left: 1px solid var(--gold-d); }
+.serata__script em { font-style: italic; color: var(--gold-l); }
+.serata__sign {
+  margin-top: 60px;
+  text-align: center;
+  padding-top: 48px;
+  border-top: 1px solid rgba(212,162,76,.3);
+  font-family: var(--head);
+  font-style: italic;
+  font-size: 22px;
+  color: var(--gold-l);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BOOK
+   ═══════════════════════════════════════════════════════════ */
+.book {
+  padding: 140px 0;
+  background: var(--cream);
+}
+.book__layout {
+  display: grid;
+  grid-template-columns: 1fr .95fr;
+  gap: 80px;
+  align-items: start;
+}
+.book__left h2 {
+  font-family: var(--head);
+  font-size: clamp(40px, 5vw, 68px);
+  font-weight: 300;
+  font-variation-settings: "opsz" 144, "wght" 300;
+  line-height: 1.05;
+  letter-spacing: -.025em;
+  margin-bottom: 24px;
+  color: var(--ink);
+}
+.book__left h2 em { font-style: italic; color: var(--terra); font-weight: 400; }
+.book__left > p {
   font-size: 18px;
   line-height: 1.7;
   color: var(--ink-2);
-  margin-bottom: 36px;
+  margin-bottom: 40px;
+  max-width: 460px;
 }
-.book__info {
-  display: grid; gap: 20px;
-  margin-top: 32px;
-}
+.book__info { display: grid; gap: 24px; }
 .info-row {
   display: grid;
-  grid-template-columns: 40px 1fr;
-  gap: 18px;
+  grid-template-columns: 44px 1fr;
+  gap: 20px;
   align-items: start;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--line);
 }
-.info-row svg {
-  width: 24px; height: 24px;
-  color: var(--terra);
-  flex-shrink: 0;
+.info-row:last-child { border-bottom: none; }
+.info-row__icon {
+  width: 44px; height: 44px;
+  background: var(--terra);
+  color: var(--bone);
+  border-radius: 50%;
+  display: grid; place-items: center;
 }
+.info-row__icon svg { width: 18px; height: 18px; }
 .info-row b {
   display: block;
   font-family: var(--head);
-  font-weight: 700;
-  font-size: 16px;
+  font-weight: 500;
+  font-size: 17px;
   color: var(--ink);
   margin-bottom: 4px;
 }
 .info-row span {
-  font-size: 15px;
+  font-size: 14px;
   color: var(--ink-2);
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .form {
-  background: var(--cream);
-  border: 1px solid var(--line);
-  padding: 40px;
-  border-radius: var(--radius);
-  box-shadow: 0 20px 60px rgba(42,30,24,.07);
+  background: var(--ink);
+  color: var(--bone);
+  padding: 48px 44px;
+  border-radius: 4px;
+  box-shadow: 0 40px 100px rgba(26,17,12,.2);
+  position: relative;
+  overflow: hidden;
 }
-.form h3 {
+.form::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--terra), var(--gold), var(--terra));
+}
+.form__head { margin-bottom: 32px; }
+.form__head small {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--gold-l);
+  margin-bottom: 10px;
+}
+.form__head h3 {
   font-family: var(--head);
-  font-size: 24px;
-  color: var(--ink);
-  margin-bottom: 8px;
+  font-size: 32px;
+  font-weight: 400;
   font-style: italic;
-  font-weight: 700;
-}
-.form p.form__hint {
-  font-size: 14px;
-  color: var(--mute);
-  margin-bottom: 28px;
+  color: var(--bone);
+  letter-spacing: -.01em;
 }
 .form__row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 16px;
+  gap: 14px;
+  margin-bottom: 14px;
 }
-.form__field {
-  display: block;
-  margin-bottom: 16px;
-}
+.form__field { display: block; margin-bottom: 14px; }
 .form__field label {
   display: block;
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .22em;
   text-transform: uppercase;
-  letter-spacing: .12em;
-  color: var(--ink-2);
+  color: var(--gold-l);
   margin-bottom: 8px;
 }
 .form__field input,
 .form__field select {
   width: 100%;
   padding: 14px 16px;
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
+  background: rgba(246,236,215,.06);
+  border: 1px solid rgba(246,236,215,.15);
+  border-radius: 2px;
   font-family: var(--body);
   font-size: 15px;
-  color: var(--ink);
-  transition: border .18s ease;
+  color: var(--bone);
+  transition: all .2s var(--easing);
 }
 .form__field input:focus,
 .form__field select:focus {
   outline: none;
-  border-color: var(--terra);
+  border-color: var(--gold-l);
+  background: rgba(246,236,215,.1);
 }
+.form__field select option { background: var(--ink); }
+.form__field input::placeholder { color: rgba(246,236,215,.4); }
 .form .btn {
   width: 100%;
   justify-content: center;
-  padding: 18px;
-  font-size: 14px;
-  margin-top: 8px;
+  padding: 20px;
+  font-size: 13px;
+  margin-top: 12px;
+}
+.form__disclaimer {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 11px;
+  color: rgba(246,236,215,.4);
+  letter-spacing: .05em;
 }
 
-@media (max-width: 900px) {
-  .book__inner { grid-template-columns: 1fr; gap: 50px; }
-  .form { padding: 28px; }
+@media (max-width: 980px) {
+  .book__layout { grid-template-columns: 1fr; gap: 50px; }
+  .form { padding: 36px 28px; }
   .form__row { grid-template-columns: 1fr; }
 }
 
-/* ───── FOOTER ───────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════════════════════ */
 footer {
-  background: var(--ink);
-  color: rgba(250,243,231,.7);
-  padding: 70px 0 30px;
+  background: var(--black);
+  color: rgba(246,236,215,.65);
+  padding: 100px 0 40px;
+  position: relative;
+  overflow: hidden;
+}
+footer::before {
+  content: "DUENDE";
+  position: absolute;
+  bottom: -80px; left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--head);
+  font-size: 320px;
+  font-weight: 500;
+  font-style: italic;
+  color: rgba(246,236,215,.03);
+  letter-spacing: -.04em;
+  pointer-events: none;
+  white-space: nowrap;
 }
 .foot__top {
+  position: relative;
   display: grid;
   grid-template-columns: 1.4fr 1fr 1fr 1fr;
-  gap: 40px;
-  margin-bottom: 50px;
+  gap: 48px;
+  margin-bottom: 60px;
 }
 .foot__brand {
   font-family: var(--head);
-  font-size: 28px;
-  color: var(--cream);
-  font-weight: 700;
+  font-size: 32px;
+  color: var(--bone);
+  font-weight: 400;
+  font-style: italic;
   margin-bottom: 10px;
+  letter-spacing: -.01em;
 }
-.foot__brand small {
+.foot__brand + small {
   display: block;
-  font-family: var(--body);
   font-size: 10px;
   font-weight: 500;
+  letter-spacing: .3em;
   text-transform: uppercase;
-  letter-spacing: .22em;
   color: var(--gold-l);
-  margin-top: 2px;
+  margin-bottom: 24px;
 }
-.foot__brand + p { font-size: 14px; line-height: 1.6; max-width: 300px; }
+.foot__brand-wrap > p {
+  font-size: 14px;
+  line-height: 1.6;
+  max-width: 300px;
+  color: rgba(246,236,215,.55);
+}
 .foot h5 {
   font-family: var(--head);
-  font-size: 14px;
+  font-size: 13px;
   color: var(--gold-l);
   text-transform: uppercase;
-  letter-spacing: .18em;
-  margin-bottom: 18px;
+  letter-spacing: .22em;
+  margin-bottom: 20px;
   font-weight: 600;
 }
 .foot ul { list-style: none; }
 .foot li { margin-bottom: 10px; font-size: 14px; }
 .foot li a:hover { color: var(--gold-l); }
-.foot__bar {
-  padding-top: 30px;
-  border-top: 1px solid rgba(250,243,231,.1);
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
-  font-size: 12px;
-  color: rgba(250,243,231,.4);
-}
-.social { display: flex; gap: 10px; margin-top: 20px; }
+.social { display: flex; gap: 10px; margin-top: 24px; }
 .social a {
-  width: 36px; height: 36px;
-  border: 1px solid rgba(250,243,231,.25);
+  width: 38px; height: 38px;
+  border: 1px solid rgba(246,236,215,.2);
   border-radius: 50%;
   display: grid; place-items: center;
-  transition: all .2s ease;
+  transition: all .2s var(--easing);
 }
 .social a:hover {
   background: var(--terra);
   border-color: var(--terra);
-  color: var(--cream);
+  color: var(--bone);
 }
-.social svg { width: 16px; height: 16px; }
+.social svg { width: 15px; height: 15px; }
+.foot__bar {
+  padding-top: 32px;
+  border-top: 1px solid rgba(246,236,215,.1);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 11px;
+  color: rgba(246,236,215,.4);
+  letter-spacing: .05em;
+  position: relative;
+}
 
 @media (max-width: 820px) {
-  section.block { padding: 70px 0; }
-  .foot__top { grid-template-columns: 1fr 1fr; gap: 30px; }
+  section.block { padding: 90px 0; }
+  .foot__top { grid-template-columns: 1fr 1fr; gap: 36px; }
+  footer::before { font-size: 160px; bottom: -40px; }
 }
 @media (max-width: 480px) {
   .foot__top { grid-template-columns: 1fr; }
@@ -827,392 +1553,740 @@ footer {
 </head>
 <body>
 
-<!-- ═════════ NAV ═════════ -->
-<nav class="nav">
+<!-- ═══════════════════ NAV ═══════════════════ -->
+<nav class="nav" id="nav">
   <div class="nav__inner">
-    <a href="#" class="brand">
-      <span class="brand__mark">D</span>
+    <a href="#" class="nav__brand">
+      <span class="nav__mark">D</span>
       <span>El Duende<small>Spagna, a Roma</small></span>
     </a>
     <div class="nav__links">
       <a href="#storia">Il locale</a>
-      <a href="#menu">La cucina</a>
+      <a href="#cucina">La cucina</a>
       <a href="#ambiente">L'ambiente</a>
-      <a href="#voci">Recensioni</a>
+      <a href="#voci">Chi &egrave; venuto</a>
       <a href="#book">Dove siamo</a>
     </div>
-    <a href="#book" class="nav__cta">Prenota</a>
+    <div class="nav__cta-wrap">
+      <span class="nav__phone">+39 06 487 5950</span>
+      <a href="#book" class="nav__cta">Prenota</a>
+    </div>
   </div>
 </nav>
 
-<!-- ═════════ HERO ═════════ -->
+<!-- ═══════════════════ HERO ═══════════════════ -->
 <section class="hero">
-  <div class="wrap hero__grid">
+  <div class="wide hero__layout">
     <div>
-      <div class="hero__kicker">Ristorante spagnolo &middot; Roma &middot; dal 2003</div>
-      <h1>A due passi dai Fori, un angolo di Spagna <em>che non recita una parte</em>.</h1>
+      <div class="hero__badge">Ristorante spagnolo &middot; dal 2003</div>
+      <h1 class="hero__title">
+        A cinque minuti<br>
+        dal Colosseo,<br>
+        <em>un angolo</em><br>
+        <span class="big">di Siviglia.</span>
+      </h1>
       <p class="hero__lead">
-        Tapas, paella, jam&oacute;n ib&eacute;rico tagliato a mano davanti al tavolo.
-        Non ispirazione mediterranea, non cucina fusion: cucina spagnola e basta,
+        Non ispirazione mediterranea. Non cucina fusion. <strong>Cucina spagnola e basta</strong>,
         preparata da chi la Spagna la conosce perch&eacute; ci &egrave; cresciuto.
-        Benvenuto da El Duende.
+        Tapas, paella sul fuoco vivo, jam&oacute;n ib&eacute;rico tagliato a mano davanti al tavolo.
       </p>
-      <div class="hero__cta">
-        <a href="#book" class="btn btn--primary">
+
+      <div class="hero__ctas">
+        <a href="#book" class="btn btn--gold">
           Prenota un tavolo
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
         </a>
-        <a href="#menu" class="btn btn--outline">Scopri la cucina</a>
+        <a href="#cucina" class="btn btn--ghost-light">Scopri la cucina</a>
       </div>
-      <div class="hero__phone">
-        <div>
-          <strong>+39 06 487 5950</strong>
-          <span>Via del Boschetto 118, Rione Monti</span>
-        </div>
+
+      <div class="hero__meta">
+        <div><b>2003</b><span>Dal cuore di Monti</span></div>
+        <div><b>20</b><span>Coperti in sala</span></div>
+        <div><b>4.8&starf;</b><span>Google 2.412 voti</span></div>
+        <div><b>35&euro;</b><span>Scontrino medio</span></div>
       </div>
     </div>
 
     <div class="hero__visual" aria-hidden="true">
-      <div class="hero__frame">
-        <svg viewBox="0 0 320 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-          <!-- Background shapes evoking Spanish atmosphere: a stylized paella pan with items -->
+      <div class="hero__plate">
+        <span class="hero__caption">Nuestra casa &middot; La casa nostra</span>
+        <span class="hero__corner-tr"></span>
+        <span class="hero__corner-bl"></span>
+
+        <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
           <defs>
-            <radialGradient id="g1" cx="50%" cy="40%">
-              <stop offset="0%" stop-color="#E8A857" stop-opacity=".4"/>
-              <stop offset="100%" stop-color="#4A1512" stop-opacity="0"/>
+            <radialGradient id="paella-glow" cx="50%" cy="50%">
+              <stop offset="0%" stop-color="#E8C081" stop-opacity=".35"/>
+              <stop offset="100%" stop-color="#3A0F0B" stop-opacity="0"/>
             </radialGradient>
+            <linearGradient id="pan-side" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#1A110C"/>
+              <stop offset="50%" stop-color="#2B1D14"/>
+              <stop offset="100%" stop-color="#1A110C"/>
+            </linearGradient>
           </defs>
-          <rect width="320" height="400" fill="url(#g1)"/>
-          <!-- Decorative frame -->
-          <rect x="20" y="20" width="280" height="360" fill="none" stroke="#FFFBF0" stroke-width="1" opacity=".3"/>
-          <rect x="30" y="30" width="260" height="340" fill="none" stroke="#FFFBF0" stroke-width="1" opacity=".2"/>
 
-          <!-- Guitar silhouette -->
-          <g transform="translate(160, 200)" opacity=".88">
-            <!-- Paella pan -->
-            <ellipse cx="0" cy="20" rx="120" ry="26" fill="#2A1E18" opacity=".4"/>
-            <ellipse cx="0" cy="10" rx="118" ry="22" fill="#4A1512"/>
-            <ellipse cx="0" cy="5" rx="110" ry="18" fill="#8E2626"/>
-            <ellipse cx="0" cy="0" rx="100" ry="15" fill="#C9843A"/>
-            <!-- Rice detail -->
-            <g fill="#FAF3E7" opacity=".85">
-              <circle cx="-60" cy="-2" r="2.5"/>
-              <circle cx="-30" cy="-4" r="2"/>
-              <circle cx="10" cy="-5" r="2.5"/>
-              <circle cx="50" cy="-3" r="2"/>
-              <circle cx="80" cy="0" r="2.5"/>
-              <circle cx="-80" cy="2" r="2"/>
-              <circle cx="-10" cy="2" r="2"/>
-              <circle cx="35" cy="3" r="2"/>
-              <circle cx="70" cy="-6" r="2"/>
-              <circle cx="-45" cy="4" r="2"/>
+          <!-- warm glow background -->
+          <ellipse cx="200" cy="250" rx="180" ry="180" fill="url(#paella-glow)"/>
+
+          <!-- Steam wisps -->
+          <g opacity=".2" stroke="#F6ECD7" stroke-width="1.5" fill="none" stroke-linecap="round">
+            <path d="M160 80 Q155 100 165 120 Q170 140 155 160"/>
+            <path d="M200 70 Q195 95 205 115 Q210 135 195 155"/>
+            <path d="M240 80 Q245 105 235 125 Q230 145 245 165"/>
+          </g>
+
+          <!-- Paella pan (top view, elegant) -->
+          <g transform="translate(200, 300)">
+            <!-- outer rim shadow -->
+            <ellipse cx="0" cy="12" rx="155" ry="35" fill="#000" opacity=".5"/>
+
+            <!-- pan outer ring -->
+            <ellipse cx="0" cy="0" rx="155" ry="30" fill="url(#pan-side)"/>
+
+            <!-- pan main surface -->
+            <ellipse cx="0" cy="-4" rx="146" ry="26" fill="#4A1512"/>
+            <ellipse cx="0" cy="-6" rx="138" ry="22" fill="#8E2626"/>
+            <ellipse cx="0" cy="-8" rx="128" ry="18" fill="#C84633"/>
+
+            <!-- Golden rice/saffron -->
+            <ellipse cx="0" cy="-10" rx="118" ry="14" fill="#D4A24C"/>
+            <ellipse cx="0" cy="-11" rx="100" ry="10" fill="#E8C081" opacity=".7"/>
+
+            <!-- Rice grains (dots scattered) -->
+            <g fill="#F6ECD7" opacity=".9">
+              <circle cx="-80" cy="-11" r="1.5"/>
+              <circle cx="-55" cy="-13" r="1.2"/>
+              <circle cx="-30" cy="-10" r="1.5"/>
+              <circle cx="-10" cy="-13" r="1.2"/>
+              <circle cx="20" cy="-11" r="1.5"/>
+              <circle cx="45" cy="-14" r="1.2"/>
+              <circle cx="70" cy="-10" r="1.5"/>
+              <circle cx="95" cy="-9" r="1.2"/>
+              <circle cx="-95" cy="-8" r="1.2"/>
+              <circle cx="-40" cy="-8" r="1.5"/>
+              <circle cx="5" cy="-7" r="1.5"/>
+              <circle cx="55" cy="-7" r="1.2"/>
+              <circle cx="85" cy="-13" r="1.5"/>
             </g>
-            <!-- Prawns (red curves) -->
-            <path d="M-40 -10 Q-30 -18 -15 -14 Q-20 -8 -40 -10 Z" fill="#B13838" stroke="#2A1E18" stroke-width=".8"/>
-            <path d="M20 -12 Q30 -20 45 -15 Q40 -8 20 -12 Z" fill="#B13838" stroke="#2A1E18" stroke-width=".8"/>
-            <path d="M-5 -8 Q5 -16 20 -10 Q15 -4 -5 -8 Z" fill="#B13838" stroke="#2A1E18" stroke-width=".8"/>
+
+            <!-- Red prawn 1 -->
+            <g transform="translate(-45, -14)">
+              <path d="M-18 0 Q-15 -8 -5 -8 Q5 -8 10 -4 Q10 2 0 4 Q-10 4 -18 0 Z" fill="#C84633" stroke="#1A110C" stroke-width=".7"/>
+              <path d="M8 -4 L14 -6 M8 -2 L15 -1 M9 0 L14 2" stroke="#1A110C" stroke-width=".7" fill="none" stroke-linecap="round"/>
+              <circle cx="7" cy="-5" r=".8" fill="#1A110C"/>
+            </g>
+
+            <!-- Red prawn 2 -->
+            <g transform="translate(35, -14) rotate(15)">
+              <path d="M-18 0 Q-15 -8 -5 -8 Q5 -8 10 -4 Q10 2 0 4 Q-10 4 -18 0 Z" fill="#C84633" stroke="#1A110C" stroke-width=".7"/>
+              <path d="M8 -4 L14 -6 M8 -2 L15 -1 M9 0 L14 2" stroke="#1A110C" stroke-width=".7" fill="none" stroke-linecap="round"/>
+              <circle cx="7" cy="-5" r=".8" fill="#1A110C"/>
+            </g>
+
+            <!-- Mussel shells -->
+            <g>
+              <ellipse cx="-70" cy="-10" rx="8" ry="4" fill="#2B1D14" stroke="#1A110C" stroke-width=".5" transform="rotate(-20 -70 -10)"/>
+              <ellipse cx="60" cy="-11" rx="8" ry="4" fill="#2B1D14" stroke="#1A110C" stroke-width=".5" transform="rotate(15 60 -11)"/>
+              <ellipse cx="-20" cy="-13" rx="7" ry="3.5" fill="#1A110C" stroke="#0D0806" stroke-width=".5" transform="rotate(30 -20 -13)"/>
+            </g>
+
             <!-- Lemon wedges -->
-            <path d="M-70 -4 Q-62 -8 -58 -2 Q-66 4 -70 -4 Z" fill="#E8A857" stroke="#2A1E18" stroke-width=".8"/>
-            <path d="M65 -2 Q73 -6 77 0 Q69 6 65 -2 Z" fill="#E8A857" stroke="#2A1E18" stroke-width=".8"/>
-            <!-- Red peppers (small strips) -->
-            <path d="M-20 -3 L-5 -5 L-5 -2 L-20 0 Z" fill="#8E2626"/>
-            <path d="M30 -2 L45 -4 L45 -1 L30 1 Z" fill="#8E2626"/>
+            <g>
+              <path d="M-100 -12 L-85 -14 L-82 -8 Z" fill="#E8C081" stroke="#1A110C" stroke-width=".5"/>
+              <path d="M85 -14 L100 -11 L88 -7 Z" fill="#E8C081" stroke="#1A110C" stroke-width=".5"/>
+            </g>
+
+            <!-- Green peas/beans -->
+            <g fill="#6B6033" opacity=".85">
+              <circle cx="-65" cy="-7" r="2"/>
+              <circle cx="-25" cy="-5" r="1.8"/>
+              <circle cx="25" cy="-6" r="2"/>
+              <circle cx="65" cy="-7" r="1.8"/>
+              <circle cx="-45" cy="-4" r="2"/>
+              <circle cx="45" cy="-4" r="2"/>
+            </g>
+
+            <!-- Handles (hint of pan rim) -->
+            <ellipse cx="-160" cy="-2" rx="12" ry="6" fill="#1A110C"/>
+            <ellipse cx="160" cy="-2" rx="12" ry="6" fill="#1A110C"/>
+
+            <!-- Highlight on pan edge -->
+            <path d="M-140 -14 Q0 -32 140 -14" fill="none" stroke="#E8C081" stroke-width="1" opacity=".4"/>
           </g>
 
-          <!-- Flamenco silhouette top-left -->
-          <g transform="translate(50, 70)" fill="#FFFBF0" opacity=".2">
-            <path d="M0 0 Q10 -10 20 0 Q25 5 20 15 Q10 20 0 15 Q-5 8 0 0 Z"/>
+          <!-- Decorative tiles pattern top-left -->
+          <g transform="translate(40, 60)" opacity=".2">
+            <rect x="0" y="0" width="30" height="30" fill="none" stroke="#D4A24C" stroke-width=".8"/>
+            <path d="M5 15 L15 5 L25 15 L15 25 Z" fill="none" stroke="#D4A24C" stroke-width=".8"/>
+            <circle cx="15" cy="15" r="4" fill="none" stroke="#D4A24C" stroke-width=".8"/>
+          </g>
+          <g transform="translate(80, 60)" opacity=".15">
+            <rect x="0" y="0" width="30" height="30" fill="none" stroke="#D4A24C" stroke-width=".8"/>
+            <path d="M5 15 L15 5 L25 15 L15 25 Z" fill="none" stroke="#D4A24C" stroke-width=".8"/>
           </g>
 
-          <!-- Text overlay stamp -->
-          <text x="160" y="340" font-family="Playfair Display, serif" font-size="14" font-style="italic" fill="#FFFBF0" text-anchor="middle" opacity=".9">bienvenido &middot; benvenuto</text>
-          <text x="160" y="360" font-family="Playfair Display, serif" font-size="11" fill="#FFFBF0" text-anchor="middle" opacity=".6" letter-spacing="4">EL DUENDE &middot; ROMA</text>
+          <!-- Signature flourish bottom-right -->
+          <g transform="translate(320, 420)" opacity=".4" stroke="#E8C081" stroke-width="1" fill="none" stroke-linecap="round">
+            <path d="M-30 0 Q-15 -8 0 0 Q15 8 30 0"/>
+            <path d="M-20 10 Q0 4 20 10"/>
+          </g>
         </svg>
+
+        <div class="hero__caption-bottom">
+          <b>Paella Valenciana</b>
+          <span>25 minuti &middot; sul fuoco</span>
+        </div>
       </div>
-      <div class="hero__stamp">
+
+      <div class="hero__sticker">
         <span>Dal</span>
-        <b>2003</b>
-        <span>Via del Boschetto</span>
+        <b>'03</b>
+        <span>Rione Monti</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═════════ STRIP ═════════ -->
-<div class="strip" aria-hidden="true">
-  <div class="strip__track">
-    <span>Jam&oacute;n <em>&#9830;</em> Paella Valenciana <em>&#9830;</em> Tapas <em>&#9830;</em> Flamenco <em>&#9830;</em> Sangr&iacute;a <em>&#9830;</em> Tortilla <em>&#9830;</em> Crema catalana <em>&#9830;</em></span>
-    <span>Jam&oacute;n <em>&#9830;</em> Paella Valenciana <em>&#9830;</em> Tapas <em>&#9830;</em> Flamenco <em>&#9830;</em> Sangr&iacute;a <em>&#9830;</em> Tortilla <em>&#9830;</em> Crema catalana <em>&#9830;</em></span>
+<!-- ═══════════════════ MARQUEE ═══════════════════ -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee__track">
+    <span>Jam&oacute;n de Jab&uacute;go <em>&#9830;</em> Paella Valenciana <em>&#9830;</em> Croquetas de jam&oacute;n <em>&#9830;</em> Patatas bravas <em>&#9830;</em> Rabo de toro <em>&#9830;</em> Crema catalana <em>&#9830;</em> Sangr&iacute;a de la casa <em>&#9830;</em></span>
+    <span>Jam&oacute;n de Jab&uacute;go <em>&#9830;</em> Paella Valenciana <em>&#9830;</em> Croquetas de jam&oacute;n <em>&#9830;</em> Patatas bravas <em>&#9830;</em> Rabo de toro <em>&#9830;</em> Crema catalana <em>&#9830;</em> Sangr&iacute;a de la casa <em>&#9830;</em></span>
   </div>
 </div>
 
-<!-- ═════════ STORIA ═════════ -->
-<section class="block" id="storia">
-  <div class="block__head">
-    <span class="block__eyebrow">Il locale</span>
-    <h2 class="block__title">Non ci siamo <em>inventati nulla</em>.</h2>
-  </div>
-
-  <div class="narrow story__body">
-    <p>El Duende non &egrave; un ristorante ispirato alla Spagna. &Egrave; la Spagna che si &egrave; presa un angolo di Roma e ha deciso di restarci.</p>
-
-    <p>L'ha aperto nel 2003 &Aacute;lvaro S&aacute;nchez, cresciuto a Siviglia e arrivato in Italia con un'idea precisa in testa: chi veniva a mangiare da lui doveva sentire gli stessi profumi della cucina di sua madre. Non una citazione, non un omaggio, non una versione italianizzata. Un piatto vero, servito ogni sera a Roma come lo si sarebbe servito ad Andalus&iacute;a la sera dopo.</p>
-
-    <p>Vent'anni dopo, in via del Boschetto si entra ancora cos&igrave;. Tende rosse, locandine di flamenco incorniciate, le pareti coperte dai quadri che &Aacute;lvaro continua a riportare a casa ogni volta che torna in Spagna. La musica &egrave; spagnola, il personale di sala parla spagnolo tra un tavolo e l'altro, e il menu non ha un piatto che non sia stato pensato e provato da uno chef spagnolo.</p>
-
-    <div class="story__quote">
-      Non siamo fusion, non siamo mediterranei. Siamo spagnoli, a Roma. E questa differenza, al primo morso, si sente tutta.
-      <cite>&mdash; &Aacute;lvaro S&aacute;nchez, titolare</cite>
+<!-- ═══════════════════ PROLOGO ═══════════════════ -->
+<section class="prologo">
+  <div class="narrow">
+    <span class="hand">prologo</span>
+    <h2>
+      Non abbiamo mai voluto fare un ristorante <em>&quot;ispirato alla Spagna&quot;</em>.
+      Volevamo fare un ristorante <em>spagnolo</em>, qui a Roma. &Egrave; una differenza
+      che si sente dopo tre bocconi.
+    </h2>
+    <div class="prologo__sig">
+      <svg viewBox="0 0 120 60" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M10 40 Q30 10 50 30 T110 25"/>
+        <path d="M30 48 L90 48"/>
+      </svg>
+      <span>&Aacute;lvaro S&aacute;nchez &middot; titolare</span>
     </div>
-
-    <p>Negli anni ci hanno chiesto decine di volte di aprire altre sedi. Abbiamo sempre detto no. Perch&eacute; quello che facciamo qui funziona esattamente perch&eacute; &egrave; qui: in questo locale, con queste persone, con questa cucina piccola in cui ci vediamo lavorare mentre arriva il nostro piatto. Siamo rimasti un posto solo. E l&igrave; vogliamo restare.</p>
   </div>
 </section>
 
-<!-- ═════════ MENU ═════════ -->
-<section class="block menu" id="menu">
-  <div class="block__head">
-    <span class="block__eyebrow">La cucina</span>
-    <h2 class="block__title">Il menu che <em>gli spagnoli ordinano</em>.</h2>
-    <p class="block__sub">pochi piatti, fatti seri</p>
-  </div>
+<!-- ═══════════════════ STORIA ═══════════════════ -->
+<section class="block storia" id="storia">
+  <div class="storia__layout">
 
-  <div class="wrap menu__cols">
-    <div class="menu__text">
-      <p>Si parte sempre da l&igrave;: dalle <strong>tapas</strong>. Perch&eacute; in Spagna una cena non comincia con un antipasto: comincia con cinque piatti piccoli al centro del tavolo, da dividere. Da noi &egrave; lo stesso. &Egrave; il momento in cui ci si guarda negli occhi, si assaggia tutto, si decide insieme cosa ordinare dopo.</p>
+    <div class="storia__image">
+      <span class="storia__badge">dal 2003</span>
+      <div class="storia__frame" aria-hidden="true">
+        <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <radialGradient id="rays" cx="50%" cy="40%">
+              <stop offset="0%" stop-color="#D4A24C" stop-opacity=".35"/>
+              <stop offset="100%" stop-color="#1A110C" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <ellipse cx="200" cy="180" rx="200" ry="160" fill="url(#rays)"/>
 
-      <p>Le <strong>patatas bravas</strong> arrivano a cubi irregolari, friggono due volte, e la salsa brava la prepariamo in cucina con pomodoro, paprika affumicata e cayenna. Niente ketchup, niente scorciatoie. Le <strong>croquetas de jam&oacute;n</strong> sono besciamella densa, impanatura spessa, dentro il prosciutto a pezzi veri. Non frullato. Si sente ogni fibra.</p>
+          <!-- Jamón leg hanging -->
+          <g transform="translate(200, 250)">
+            <!-- Cord -->
+            <path d="M0 -200 L0 -100" stroke="#F6ECD7" stroke-width="1" opacity=".3"/>
+            <!-- Jamón hoof -->
+            <path d="M-6 -102 L0 -112 L6 -102 L4 -94 L-4 -94 Z" fill="#1A110C" stroke="#F6ECD7" stroke-width=".5"/>
+            <!-- Jamón leg body -->
+            <path d="M-45 -40 Q-55 -70 -40 -92 Q-20 -100 0 -98 Q20 -100 40 -92 Q55 -70 45 -40 Q50 -10 40 20 Q30 50 20 90 Q10 120 0 125 Q-10 120 -20 90 Q-30 50 -40 20 Q-50 -10 -45 -40 Z" fill="#8E2626" stroke="#1A110C" stroke-width="1.5"/>
+            <!-- Fat marbling -->
+            <g fill="#F6ECD7" opacity=".3">
+              <ellipse cx="-20" cy="-40" rx="15" ry="4" transform="rotate(10 -20 -40)"/>
+              <ellipse cx="20" cy="-30" rx="12" ry="3" transform="rotate(-15 20 -30)"/>
+              <ellipse cx="-10" cy="0" rx="18" ry="4" transform="rotate(20 -10 0)"/>
+              <ellipse cx="15" cy="30" rx="14" ry="3" transform="rotate(-10 15 30)"/>
+              <ellipse cx="-5" cy="60" rx="16" ry="4" transform="rotate(15 -5 60)"/>
+              <ellipse cx="10" cy="90" rx="10" ry="3" transform="rotate(-20 10 90)"/>
+            </g>
+            <!-- Slice cut area (lighter) -->
+            <path d="M-25 -20 Q-20 -40 -5 -45 Q10 -42 15 -25 Q10 -5 -5 0 Q-20 -5 -25 -20 Z" fill="#C84633" opacity=".6"/>
+          </g>
 
-      <p>La <strong>tortilla espa&ntilde;ola</strong> esce come si usa a Madrid: morbida al centro, dorata ai bordi, cipolla stracotta. Chi la vuole asciutta non &egrave; mai stato a Madrid.</p>
+          <!-- Hanging slices -->
+          <g transform="translate(200, 400)">
+            <path d="M-30 0 Q-25 -8 -15 -5 Q-5 -2 0 -8 Q5 -2 15 -5 Q25 -8 30 0 Q25 8 15 5 Q5 2 0 8 Q-5 2 -15 5 Q-25 8 -30 0 Z" fill="#C84633" opacity=".85" stroke="#1A110C" stroke-width=".5"/>
+          </g>
 
-      <h3>Il jam&oacute;n che si guarda prima di mangiare</h3>
-      <p>Alla parete, dietro al banco, c'&egrave; sempre una <strong>pata negra di Jab&uacute;go</strong>. La tagliamo a mano davanti al cliente che la ordina, un piatto alla volta, perch&eacute; il jam&oacute;n ib&eacute;rico perso in affettatrice meccanica &egrave; un reato minore. &Egrave; una cosa che si guarda prima ancora di assaggiarla.</p>
+          <!-- Vintage frame details -->
+          <g opacity=".2" stroke="#D4A24C" stroke-width="1" fill="none">
+            <circle cx="60" cy="80" r="20"/>
+            <circle cx="60" cy="80" r="15"/>
+            <circle cx="340" cy="80" r="20"/>
+            <circle cx="340" cy="80" r="15"/>
+            <circle cx="60" cy="420" r="20"/>
+            <circle cx="60" cy="420" r="15"/>
+            <circle cx="340" cy="420" r="20"/>
+            <circle cx="340" cy="420" r="15"/>
+          </g>
 
-      <h3>La paella si cucina sul momento</h3>
-      <p>E poi c'&egrave; lei. La <strong>paella valenciana</strong> con pollo, coniglio, fagiolini verdi e peperone, cucinata nella padella originale sulla fiamma viva. Si forma, sul fondo, quella crosta di riso dorato che in Spagna chiamiamo <i>socarrat</i> &mdash; e che per noi &egrave; la parte migliore del piatto. Oppure la <strong>paella de marisco</strong>, con gamberi di Sanl&uacute;car, cozze, calamari e scampi.</p>
-
-      <p>Tempo di cottura: venticinque minuti. Non la facciamo in anticipo, non la riscaldiamo, non la congeliamo. Chiediamo pazienza. In cambio esce come dovrebbe uscire. Se hai fretta, non &egrave; serata.</p>
-
-      <h3>Il dolce, e un bicchiere di jerez</h3>
-      <p>A fine pasto, la <strong>crema catalana</strong> caramellata al momento con il cannello sopra la crosta di zucchero. O il <strong>flan de queso</strong> che prepariamo ogni mattina. Un bicchiere di jerez, un digestivo d'uva, e la serata si chiude dove voleva chiudersi.</p>
+          <!-- Caption -->
+          <text x="200" y="470" font-family="Fraunces, serif" font-size="12" font-style="italic" fill="#E8C081" text-anchor="middle" opacity=".7" letter-spacing="2">pata negra &middot; jab&uacute;go</text>
+        </svg>
+      </div>
     </div>
 
-    <aside class="menu__plate">
-      <h4>Alcuni piatti dal menu</h4>
+    <div class="storia__body">
+      <span class="eyebrow">Il locale</span>
+      <h2>Non ci siamo <em>inventati nulla</em>.</h2>
+
+      <p>El Duende non &egrave; un ristorante ispirato alla Spagna. &Egrave; la Spagna che si &egrave; presa un angolo di Roma e ha deciso di restarci.</p>
+
+      <p>L'ha aperto nel 2003 &Aacute;lvaro S&aacute;nchez, cresciuto a Siviglia e arrivato in Italia con un'idea sola in testa: chi veniva a mangiare da lui doveva sentire gli stessi profumi della cucina di sua madre. Non una citazione, non un omaggio. Un piatto vero, servito ogni sera a Roma come lo si sarebbe servito ad Andalus&iacute;a la sera dopo.</p>
+
+      <div class="storia__quote">
+        Non siamo fusion. Non siamo mediterranei. Siamo spagnoli, a Roma. E questa differenza, al primo morso, si sente tutta.
+        <cite>&mdash; &Aacute;lvaro S&aacute;nchez, titolare</cite>
+      </div>
+
+      <p>Vent'anni dopo, in via del Boschetto si entra ancora cos&igrave;. Tende rosse, locandine di flamenco incorniciate, le pareti coperte dai quadri che &Aacute;lvaro riporta ogni volta che torna in Andalusia. La musica &egrave; spagnola, in sala si parla spagnolo, e il menu non ha un piatto che non sia stato pensato da uno chef spagnolo.</p>
+
+      <p>Negli anni ci hanno chiesto decine di volte di aprire una seconda sede. Abbiamo sempre risposto no. Perch&eacute; quello che facciamo qui funziona esattamente perch&eacute; &egrave; qui: in questa cucina, con queste persone, in questo locale piccolo in cui vedi lavorare la paella mentre arriva al tavolo. Siamo rimasti un posto solo. E l&igrave; vogliamo restare.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════ SIGNATURE DISHES ═══════════════════ -->
+<section class="block signature" id="signature">
+  <div class="section__head">
+    <div class="eyebrow">I piatti che non cambieremo mai</div>
+    <h2>Tre cose <em>che facciamo serie</em>.</h2>
+    <span class="hand">i signature</span>
+  </div>
+
+  <div class="wrap signature__list">
+
+    <article class="dish">
+      <div class="dish__visual">
+        <span class="dish__num">I.</span>
+        <span class="dish__tag">Dal 2003</span>
+        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <radialGradient id="dg1" cx="50%" cy="50%"><stop offset="0%" stop-color="#D4A24C" stop-opacity=".4"/><stop offset="100%" stop-color="#1A110C" stop-opacity="0"/></radialGradient>
+          </defs>
+          <rect width="400" height="300" fill="url(#dg1)"/>
+          <!-- Paella pan from side -->
+          <g transform="translate(200, 180)">
+            <ellipse cx="0" cy="20" rx="140" ry="30" fill="#000" opacity=".4"/>
+            <ellipse cx="0" cy="0" rx="135" ry="25" fill="#1A110C"/>
+            <ellipse cx="0" cy="-5" rx="128" ry="20" fill="#4A1512"/>
+            <ellipse cx="0" cy="-10" rx="120" ry="16" fill="#C84633"/>
+            <ellipse cx="0" cy="-12" rx="108" ry="12" fill="#D4A24C"/>
+            <g fill="#F6ECD7" opacity=".9">
+              <circle cx="-60" cy="-12" r="1.5"/><circle cx="-30" cy="-14" r="1.2"/><circle cx="0" cy="-13" r="1.5"/>
+              <circle cx="30" cy="-14" r="1.2"/><circle cx="60" cy="-12" r="1.5"/>
+            </g>
+            <g transform="translate(-30, -16)">
+              <path d="M-16 0 Q-13 -7 -5 -7 Q3 -7 8 -3 Q8 2 0 3 Q-8 3 -16 0 Z" fill="#C84633" stroke="#1A110C" stroke-width=".6"/>
+            </g>
+            <g transform="translate(30, -16) rotate(15)">
+              <path d="M-16 0 Q-13 -7 -5 -7 Q3 -7 8 -3 Q8 2 0 3 Q-8 3 -16 0 Z" fill="#C84633" stroke="#1A110C" stroke-width=".6"/>
+            </g>
+            <ellipse cx="-70" cy="-11" rx="7" ry="3" fill="#2B1D14" transform="rotate(-20 -70 -11)"/>
+            <ellipse cx="70" cy="-11" rx="7" ry="3" fill="#2B1D14" transform="rotate(15 70 -11)"/>
+          </g>
+          <g opacity=".3" stroke="#F6ECD7" stroke-width="1" fill="none" stroke-linecap="round">
+            <path d="M160 60 Q155 75 165 90"/>
+            <path d="M200 55 Q195 70 205 85"/>
+            <path d="M240 60 Q245 75 235 90"/>
+          </g>
+        </svg>
+      </div>
+      <div class="dish__body">
+        <div class="dish__kicker">Il piatto che chiede pazienza</div>
+        <h3>La paella sul fuoco vivo</h3>
+        <p>Venticinque minuti nella padella originale, pollo, coniglio, fagiolini verdi e peperone. Non la cuociamo in anticipo. Non la riscaldiamo. Non la congeliamo. Si forma sul fondo quella crosta di riso dorato che in Spagna chiamiamo <i>socarrat</i>: &egrave; la parte pi&ugrave; buona del piatto. Chi ha fretta la salti.</p>
+      </div>
+    </article>
+
+    <article class="dish">
+      <div class="dish__visual" style="background:linear-gradient(145deg,#8E2626,#4A1512);">
+        <span class="dish__num">II.</span>
+        <span class="dish__tag">Pata negra</span>
+        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <!-- Jamón slices on plate -->
+          <ellipse cx="200" cy="200" rx="150" ry="40" fill="#000" opacity=".4"/>
+          <ellipse cx="200" cy="180" rx="150" ry="35" fill="#F6ECD7"/>
+          <ellipse cx="200" cy="178" rx="145" ry="32" fill="#FFF8E7"/>
+          <!-- Slices scattered on plate -->
+          <g>
+            <path d="M110 170 Q130 160 150 170 Q145 180 125 185 Q110 180 110 170 Z" fill="#C84633" stroke="#1A110C" stroke-width=".5" opacity=".92"/>
+            <path d="M160 175 Q180 162 205 173 Q198 185 180 190 Q163 185 160 175 Z" fill="#C84633" stroke="#1A110C" stroke-width=".5" opacity=".9"/>
+            <path d="M215 170 Q240 158 265 168 Q258 182 235 188 Q218 183 215 170 Z" fill="#C84633" stroke="#1A110C" stroke-width=".5" opacity=".92"/>
+            <path d="M265 175 Q290 165 310 175 Q302 185 285 190 Q268 185 265 175 Z" fill="#8E2626" stroke="#1A110C" stroke-width=".5" opacity=".88"/>
+          </g>
+          <!-- Fat marbling on slices -->
+          <g fill="#F6ECD7" opacity=".6">
+            <ellipse cx="128" cy="175" rx="5" ry="1"/>
+            <ellipse cx="180" cy="178" rx="6" ry="1.2"/>
+            <ellipse cx="238" cy="176" rx="5" ry="1"/>
+          </g>
+          <!-- Olive oil drops -->
+          <g fill="#D4A24C" opacity=".7">
+            <circle cx="150" cy="195" r="2"/>
+            <circle cx="220" cy="200" r="2.2"/>
+            <circle cx="280" cy="195" r="2"/>
+          </g>
+        </svg>
+      </div>
+      <div class="dish__body">
+        <div class="dish__kicker">Si guarda prima di assaggiarlo</div>
+        <h3>Il jam&oacute;n tagliato a mano</h3>
+        <p>Alla parete, dietro al banco, c'&egrave; sempre una pata negra di Jab&uacute;go. Lo tagliamo a mano, davanti al cliente, un piatto alla volta. L'affettatrice meccanica, qui, &egrave; un reato minore. Trenta grammi di prosciutto che costano cos&igrave; perch&eacute; sono costati cos&igrave; a comprare. E valgono il resto del conto.</p>
+      </div>
+    </article>
+
+    <article class="dish">
+      <div class="dish__visual" style="background:linear-gradient(145deg,#D4A24C,#A77B2D);">
+        <span class="dish__num" style="color:#1A110C;">III.</span>
+        <span class="dish__tag" style="background:#C84633;color:#F6ECD7;">Caramellata</span>
+        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <!-- Ramekin from top -->
+          <ellipse cx="200" cy="200" rx="110" ry="30" fill="#000" opacity=".3"/>
+          <ellipse cx="200" cy="180" rx="110" ry="28" fill="#F6ECD7"/>
+          <ellipse cx="200" cy="178" rx="105" ry="25" fill="#1A110C"/>
+          <!-- Caramelized sugar top -->
+          <ellipse cx="200" cy="175" rx="98" ry="22" fill="#8E2626"/>
+          <ellipse cx="200" cy="173" rx="92" ry="19" fill="#A77B2D"/>
+          <!-- Crack lines -->
+          <g stroke="#1A110C" stroke-width=".6" fill="none" opacity=".5" stroke-linecap="round">
+            <path d="M160 170 L180 180"/>
+            <path d="M220 165 L240 178"/>
+            <path d="M200 160 L205 180"/>
+            <path d="M180 175 L220 172"/>
+          </g>
+          <!-- Reflections -->
+          <ellipse cx="190" cy="167" rx="25" ry="3" fill="#E8C081" opacity=".5"/>
+          <ellipse cx="230" cy="170" rx="15" ry="2" fill="#E8C081" opacity=".4"/>
+          <!-- Cinnamon dust -->
+          <g fill="#4A1512" opacity=".6">
+            <circle cx="150" cy="175" r="1"/>
+            <circle cx="170" cy="180" r="1.2"/>
+            <circle cx="245" cy="175" r="1"/>
+            <circle cx="255" cy="180" r="1.2"/>
+          </g>
+        </svg>
+      </div>
+      <div class="dish__body">
+        <div class="dish__kicker">Il momento della chiusura</div>
+        <h3>La crema catalana col cannello</h3>
+        <p>Non &egrave; una cr&ecirc;me br&ucirc;l&eacute;e. &Egrave; una crema catalana: pi&ugrave; leggera, pi&ugrave; profumata di scorza di limone e cannella. Lo zucchero sopra lo caramelliamo al momento, con il cannello, al tuo tavolo. Il rumore della crosta che si spacca con il cucchiaino &egrave; esattamente la fine della serata.</p>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ═══════════════════ CUCINA — menu full ═══════════════════ -->
+<section class="block cucina" id="cucina">
+  <div class="section__head">
+    <div class="eyebrow">Il menu</div>
+    <h2>Quello che <em>ordinano gli spagnoli</em>.</h2>
+    <span class="hand">pochi piatti, fatti seri</span>
+  </div>
+
+  <div class="wrap cucina__layout">
+    <div class="cucina__text">
+      <p>Si parte sempre da l&igrave;: dalle <strong>tapas</strong>. Perch&eacute; in Spagna una cena non comincia con un antipasto, comincia con cinque piatti piccoli al centro del tavolo, da dividere. Da noi &egrave; lo stesso. &Egrave; il momento in cui ci si guarda negli occhi, si assaggia tutto, si decide insieme cosa ordinare dopo.</p>
+
+      <p>Le <strong>patatas bravas</strong> arrivano a cubi irregolari, friggono due volte, e la salsa brava la prepariamo in cucina con pomodoro, paprika affumicata e un pizzico di cayenna. Niente ketchup, niente scorciatoie. Le <strong>croquetas de jam&oacute;n</strong> sono besciamella densa, impanatura spessa, dentro il prosciutto a pezzi veri &mdash; non frullato. Si sente ogni fibra. La <strong>tortilla espa&ntilde;ola</strong> esce come si fa a Madrid: morbida al centro, dorata ai bordi, cipolla stracotta. Chi la vuole asciutta non &egrave; mai stato a Madrid.</p>
+
+      <h3>I piatti principali</h3>
+      <p>Oltre alle paella, abbiamo il <strong>rabo de toro</strong>: coda di manzo stufata quattro ore nel vino rosso di Rioja, con cipolla, carota, chiodi di garofano. Si mangia col pane, perch&eacute; il sugo &egrave; mezzo piatto. C'&egrave; la <strong>fideu&agrave;</strong>, cugina della paella fatta con la pasta corta, pi&ugrave; leggera e profumata di aglio e prezzemolo. Per chi preferisce il pesce, c'&egrave; il <strong>bacalao al pil-pil</strong>: baccal&agrave; cotto nell'olio con aglio, agitato finch&eacute; la salsa diventa una crema. &Egrave; il piatto pi&ugrave; difficile che ci sia e lo mettiamo sul menu da ventun'anni.</p>
+
+      <h3>I vini, parliamone</h3>
+      <p>Carta dei vini costruita in Spagna, bodega per bodega. Rioja, Ribera del Duero, Priorat, Rias Baixas per i bianchi, Jerez per chi vuole chiudere seriamente. Al bicchiere o alla bottiglia. Due vini di casa &mdash; un tempranillo e un albari&ntilde;o &mdash; che selezioniamo direttamente dal piccolo produttore ogni anno nuovo.</p>
+
+      <p>E poi c'&egrave; la <strong>sangr&iacute;a</strong>: la nostra &egrave; a base di tempranillo, non di vino sfuso. Macerazione di una notte con arance, limoni, mele, cannella e un dito di brandy spagnolo. Chi la assaggia la prima volta ne ordina una seconda. Succede quasi sempre.</p>
+    </div>
+
+    <aside class="plate">
+      <div class="plate__head">
+        <small>la carta</small>
+        <h4>Alcuni piatti</h4>
+      </div>
 
       <div class="plate__item">
         <div>
           <h5>Jam&oacute;n Ib&eacute;rico de Bellota</h5>
           <p>Tagliato a mano, 80g</p>
         </div>
-        <span class="plate__price">22 &euro;</span>
+        <span class="plate__price">22&euro;</span>
       </div>
-
       <div class="plate__item">
         <div>
           <h5>Tabla de Tapas</h5>
-          <p>Patatas bravas, croquetas, tortilla, pimientos de padr&oacute;n</p>
+          <p>Bravas, croquetas, tortilla, pimientos</p>
         </div>
-        <span class="plate__price">18 &euro;</span>
+        <span class="plate__price">18&euro;</span>
       </div>
-
       <div class="plate__item">
         <div>
           <h5>Paella Valenciana</h5>
-          <p>Per 2 persone, al prezzo a testa</p>
+          <p>Per 2 persone, prezzo a testa</p>
         </div>
-        <span class="plate__price">19 &euro;</span>
+        <span class="plate__price">19&euro;</span>
       </div>
-
       <div class="plate__item">
         <div>
           <h5>Paella de Marisco</h5>
-          <p>Per 2 persone, al prezzo a testa</p>
+          <p>Per 2 persone, prezzo a testa</p>
         </div>
-        <span class="plate__price">24 &euro;</span>
+        <span class="plate__price">24&euro;</span>
       </div>
-
       <div class="plate__item">
         <div>
           <h5>Rabo de Toro</h5>
-          <p>Coda di manzo stufata al vino rosso</p>
+          <p>Coda stufata al Rioja, 4 ore</p>
         </div>
-        <span class="plate__price">19 &euro;</span>
+        <span class="plate__price">19&euro;</span>
       </div>
-
+      <div class="plate__item">
+        <div>
+          <h5>Bacalao al Pil-Pil</h5>
+          <p>Il piatto difficile</p>
+        </div>
+        <span class="plate__price">22&euro;</span>
+      </div>
       <div class="plate__item">
         <div>
           <h5>Crema Catalana</h5>
-          <p>Caramellata al momento</p>
+          <p>Caramellata al tavolo</p>
         </div>
-        <span class="plate__price">7 &euro;</span>
+        <span class="plate__price">7&euro;</span>
       </div>
-
       <div class="plate__item">
         <div>
-          <h5>Sangr&iacute;a de la Casa</h5>
+          <h5>Sangr&iacute;a della casa</h5>
           <p>Caraffa 1 litro</p>
         </div>
-        <span class="plate__price">16 &euro;</span>
+        <span class="plate__price">16&euro;</span>
       </div>
 
-      <p style="margin-top:24px;font-size:13px;color:var(--mute);text-align:center;line-height:1.5;">Scontrino medio: circa 35 &euro; a persona.<br>Due tapas, un piatto, dolce e un bicchiere di vino.</p>
+      <div class="plate__foot">
+        Scontrino medio <b>35&euro; a persona</b><br>
+        Due tapas, un piatto, dolce, un bicchiere di vino
+      </div>
     </aside>
   </div>
 </section>
 
-<!-- ═════════ AMBIENTE ═════════ -->
-<section class="block ambient" id="ambiente">
-  <div class="ambient__inner wrap">
-    <div class="block__head">
-      <span class="block__eyebrow">L'ambiente</span>
-      <h2 class="block__title">Un posto dove si cena <em>a voce alta</em>.</h2>
-    </div>
+<!-- ═══════════════════ AMBIENTE ═══════════════════ -->
+<section class="ambiente" id="ambiente">
+  <div class="section__head">
+    <div class="eyebrow">L'ambiente</div>
+    <h2>Un posto dove si cena <em>a voce alta</em>.</h2>
+  </div>
 
-    <div class="ambient__text">
-      <p>A El Duende non si viene per sussurrare. Si viene per raccontarsi la giornata, per ridere forte, per restare tre ore a tavola senza accorgersene.</p>
+  <div class="narrow ambiente__text">
+    <p>A El Duende non si viene per sussurrare. Si viene per <strong>raccontarsi la giornata</strong>, per ridere forte, per restare tre ore a tavola senza accorgersene.</p>
 
-      <p>Il locale &egrave; intimo &mdash; una ventina di tavoli &mdash; ma la musica non &egrave; mai di sottofondo. &Egrave; flamenco, cantautori spagnoli, qualcosa di cubano, e nei weekend c'&egrave; spesso un chitarrista dal vivo che suona dalle nove in poi. L'illuminazione &egrave; calda e bassa, le pareti rosso vino, le tovaglie di tela grezza. Non &egrave; un ristorante stellato. &Egrave; una taverna. Ed &egrave; esattamente ci&ograve; che vogliamo continui a essere.</p>
+    <p>Il locale &egrave; intimo &mdash; una ventina di tavoli &mdash; ma la musica non &egrave; mai di sottofondo. &Egrave; <em>flamenco</em>, cantautori spagnoli, qualcosa di cubano, e nei weekend c'&egrave; sempre un chitarrista dal vivo che suona dalle nove in poi. L'illuminazione &egrave; calda e bassa, le pareti rosso vino, le tovaglie di tela grezza, i quadri sulle pareti li portiamo noi dall'Andalusia.</p>
 
-      <p>&Egrave; un buon posto per una cena a due. &Egrave; un ottimo posto per una tavolata di sei. Ed &egrave; il posto giusto se stasera vuoi sentirti da un'altra parte senza dover prendere un aereo.</p>
-    </div>
+    <p>Non &egrave; un ristorante stellato. &Egrave; una taverna. Ed &egrave; esattamente ci&ograve; che vogliamo continui a essere.</p>
 
-    <div class="ambient__pulls">
-      <article class="pull">
-        <div class="pull__num">20</div>
-        <h4>Coperti in sala</h4>
-        <p>Piccoli di proposito. Si cena vicini, come in una taverna di Siviglia.</p>
-      </article>
-      <article class="pull">
-        <div class="pull__num">V</div>
-        <h4>Venerd&igrave; e sabato</h4>
-        <p>Chitarra flamenca dal vivo dalle 21:00, inclusa nella serata.</p>
-      </article>
-      <article class="pull">
-        <div class="pull__num">3h</div>
-        <h4>Il tempo di una cena</h4>
-        <p>Qui non si pranza &mdash; si cena. Il tavolo &egrave; tuo per tutta la sera.</p>
-      </article>
+    <p>&Egrave; un buon posto per una cena a due. &Egrave; un ottimo posto per una tavolata di sei. Ed &egrave; <em>il</em> posto giusto se stasera vuoi sentirti da un'altra parte senza prendere un aereo.</p>
+  </div>
+
+  <div class="wrap ambiente__pulls">
+    <article class="pull">
+      <div class="pull__fig">20</div>
+      <h4>Coperti in sala</h4>
+      <p>Piccoli di proposito. Si cena vicini, come in una taverna di Siviglia.</p>
+    </article>
+    <article class="pull">
+      <div class="pull__fig">V<small style="font-size:.4em;vertical-align:super;">en</small> S<small style="font-size:.4em;vertical-align:super;">ab</small></div>
+      <h4>Chitarra dal vivo</h4>
+      <p>Venerd&igrave; e sabato dalle 21:00. Incluso nella serata.</p>
+    </article>
+    <article class="pull">
+      <div class="pull__fig">3h</div>
+      <h4>La tua serata</h4>
+      <p>Qui non si pranza. Si cena. Il tavolo &egrave; tuo per tutta la sera.</p>
+    </article>
+  </div>
+</section>
+
+<!-- ═══════════════════ PRESS ═══════════════════ -->
+<section class="press" aria-label="Rassegna stampa">
+  <div class="press__inner">
+    <div class="press__label">Hanno scritto di noi</div>
+    <div class="press__logos">
+      <span>La Repubblica</span>
+      <span>&middot;</span>
+      <span>Gambero Rosso</span>
+      <span>&middot;</span>
+      <span>El Pa&iacute;s</span>
+      <span>&middot;</span>
+      <span>Dissapore</span>
+      <span>&middot;</span>
+      <span>Puntarella Rossa</span>
     </div>
   </div>
 </section>
 
-<!-- ═════════ REASONS ═════════ -->
-<section class="block" id="reasons">
-  <div class="block__head">
-    <span class="block__eyebrow">Perch&eacute; venire</span>
-    <h2 class="block__title">Quattro cose <em>che non diamo per scontate</em>.</h2>
+<!-- ═══════════════════ REASONS ═══════════════════ -->
+<section class="block reasons" id="reasons">
+  <div class="section__head">
+    <div class="eyebrow">Perch&eacute; venire</div>
+    <h2>Quattro cose <em>che non diamo per scontate</em>.</h2>
   </div>
 
   <div class="narrow">
-    <div class="reasons__body">
-      <p>In Italia di ristoranti spagnoli ce ne sono tanti. Ma la differenza, al tavolo, si sente dopo trenta secondi. Noi queste quattro cose non le abbiamo mai cambiate.</p>
-    </div>
+    <p class="reasons__intro">
+      In Italia di ristoranti spagnoli ce ne sono tanti. Ma la differenza, al tavolo, si sente dopo trenta secondi. Noi queste quattro cose non le abbiamo mai cambiate.
+    </p>
 
     <div class="reasons__list">
       <article class="reason">
         <div class="reason__num">I.</div>
-        <div>
+        <div class="reason__body">
           <h3>Il nostro chef &egrave; spagnolo. Da sempre.</h3>
-          <p>Diego, il nostro capocuoco, &egrave; nato a Valencia e lavora in cucina da noi dal 2008. Le ricette non si sono mai spostate di una virgola &mdash; e nessuno le ha mai dovute &quot;adattare al gusto italiano&quot;. Si va con l'originale.</p>
+          <p>Diego, capocuoco, nato a Valencia e in cucina da noi dal 2008. Le ricette non si sono mai spostate di una virgola. Nessuno ha mai dovuto &quot;adattarle al gusto italiano&quot;. Si va con l'originale.</p>
         </div>
+        <div class="reason__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div>
       </article>
 
       <article class="reason">
         <div class="reason__num">II.</div>
-        <div>
+        <div class="reason__body">
           <h3>Compriamo dove comprano in Spagna.</h3>
-          <p>Il jam&oacute;n arriva da Jab&uacute;go, i formaggi dalla Mancha, il pimentón de la Vera dai produttori di Estremadura, i vini da bodegas che selezioniamo una a una. Nessun fornitore intermedio.</p>
+          <p>Jam&oacute;n da Jab&uacute;go. Formaggi dalla Mancha. Pimentón de la Vera dall'Estremadura. Vini da bodegas scelte una a una. Nessun fornitore intermedio, nessun distributore europeo che fa da filtro.</p>
         </div>
+        <div class="reason__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div>
       </article>
 
       <article class="reason">
         <div class="reason__num">III.</div>
-        <div>
-          <h3>Lo scontrino non ha sorprese.</h3>
-          <p>Scontrino medio: 35 &euro; a persona. Due tapas, un piatto principale, un dolce e un bicchiere di vino. Niente coperto, niente supplemento musica, niente righe strane in fondo al conto. Il prezzo che vedi sul menu &egrave; quello che paghi.</p>
+        <div class="reason__body">
+          <h3>Il conto non ha sorprese.</h3>
+          <p>Scontrino medio 35 euro a persona: due tapas, un piatto, dolce, un bicchiere. Niente coperto, niente supplemento musica, niente righe strane in fondo al conto. Il prezzo sul menu &egrave; quello che paghi.</p>
         </div>
+        <div class="reason__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div>
       </article>
 
       <article class="reason">
         <div class="reason__num">IV.</div>
-        <div>
-          <h3>Siamo a cinque minuti dal Colosseo.</h3>
-          <p>Via del Boschetto, nel cuore di Monti. A piedi dai Fori Imperiali, da Via Nazionale e da Termini. Un buon posto per cenare se la tua giornata a Roma la vuoi chiudere senza prendere una macchina.</p>
+        <div class="reason__body">
+          <h3>Cinque minuti dal Colosseo.</h3>
+          <p>Siamo in via del Boschetto, nel cuore di Monti. A piedi dai Fori Imperiali, da Via Nazionale, da Termini. Un buon posto per cenare se la tua giornata a Roma la vuoi chiudere senza prendere una macchina.</p>
         </div>
+        <div class="reason__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div>
       </article>
     </div>
   </div>
 </section>
 
-<!-- ═════════ VOICES ═════════ -->
+<!-- ═══════════════════ VOICES ═══════════════════ -->
 <section class="block voices" id="voci">
-  <div class="block__head">
-    <span class="block__eyebrow">Chi &egrave; venuto</span>
-    <h2 class="block__title">Non &egrave; <em>sponsorizzato</em>.</h2>
+  <div class="section__head">
+    <div class="eyebrow">Chi &egrave; venuto</div>
+    <h2>Non &egrave; <em>sponsorizzato</em>.</h2>
   </div>
 
-  <div class="wrap voices__list">
+  <div class="wrap voices__grid">
     <article class="voice">
       <div class="voice__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-      <p>"Vivo a Barcellona da quindici anni. Sono tornata a Roma per un weekend e volevo cercare un posto che mi facesse sentire a casa. Qui &egrave; successo. La paella era quella giusta, con il socarrat come lo fa mia nonna."</p>
+      <p>Vivo a Barcellona da quindici anni. Sono tornata a Roma per un weekend e cercavo un posto che mi facesse sentire a casa. Qui &egrave; successo. La paella era quella giusta, con il socarrat come lo fa mia nonna.</p>
       <div class="voice__who">
-        <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M20 21c0-4.4-3.6-8-8-8s-8 3.6-8 8"/></svg>
+        <div class="voice__avatar">CP</div>
         <div><b>Carmen P.</b><span>Google &middot; marzo 2026</span></div>
       </div>
     </article>
 
     <article class="voice">
       <div class="voice__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-      <p>"Ci siamo capitati per caso dopo una visita ai Fori. Prenotate: non si entra senza. Il jam&oacute;n tagliato al momento vale met&agrave; del conto da solo, e il resto non &egrave; da meno. Torner&ograve; a Roma anche solo per rifarci cena."</p>
+      <p>Ci siamo capitati per caso dopo una visita ai Fori. Prenotate: non si entra senza. Il jam&oacute;n tagliato al momento vale met&agrave; del conto da solo, e il resto non &egrave; da meno. Torner&ograve; a Roma anche solo per rifarci cena.</p>
       <div class="voice__who">
-        <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M20 21c0-4.4-3.6-8-8-8s-8 3.6-8 8"/></svg>
-        <div><b>Marco D.</b><span>TripAdvisor &middot; febbraio 2026</span></div>
+        <div class="voice__avatar" style="background:var(--gold);color:var(--ink)">MD</div>
+        <div><b>Marco D.</b><span>TripAdvisor &middot; feb 2026</span></div>
       </div>
     </article>
 
     <article class="voice">
       <div class="voice__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-      <p>"Il sabato sera con la chitarra dal vivo &egrave; un'esperienza. Non &egrave; un ristorante da scappare dopo un'ora, &egrave; un posto dove ci si ferma. Abbiamo cenato in sei, trattati come se fossimo soli."</p>
+      <p>Il sabato sera con la chitarra dal vivo &egrave; un'esperienza. Non &egrave; un ristorante da scappare dopo un'ora, &egrave; un posto dove ci si ferma. Abbiamo cenato in sei, trattati come se fossimo gli unici.</p>
       <div class="voice__who">
-        <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M20 21c0-4.4-3.6-8-8-8s-8 3.6-8 8"/></svg>
-        <div><b>Francesca B.</b><span>Google &middot; gennaio 2026</span></div>
+        <div class="voice__avatar" style="background:var(--wine);color:var(--gold-l)">FB</div>
+        <div><b>Francesca B.</b><span>Google &middot; gen 2026</span></div>
       </div>
     </article>
   </div>
 </section>
 
-<!-- ═════════ BOOK ═════════ -->
-<section class="block book" id="book">
-  <div class="wrap book__inner">
-    <div>
-      <span class="block__eyebrow" style="padding-left:0;padding-right:32px;">Prenota</span>
-      <h2 class="book__title">Vederti <em>stasera</em>?</h2>
-      <p class="book__text">
-        Siamo aperti dal marted&igrave; alla domenica, dalle 19:30 a mezzanotte. Chiuso il luned&igrave;.
-        Prenota il tuo tavolo qui a lato o chiamaci direttamente: il nostro personale di sala
-        risponde tutti i giorni dalle 11 in poi.
+<!-- ═══════════════════ SERATA — cinematic ═══════════════════ -->
+<section class="serata">
+  <div class="serata__inner">
+    <div style="text-align:center">
+      <span class="hand">una serata da el duende</span>
+    </div>
+    <h2>Immagina di <em>entrare</em>.</h2>
+
+    <div class="serata__script">
+      <p>Via del Boschetto, otto e mezza di sera. La porta &egrave; di legno, le tende di dentro sono rosse. Apri, e la prima cosa che senti &egrave; un chitarrista che accorda. La seconda, l'odore del pimentón sulla piastra.</p>
+
+      <p>Ti sistemano a un tavolino vicino alla cucina. Dall'altra parte del locale, al banco, c'&egrave; <em>&Aacute;lvaro</em> che taglia una fetta di jam&oacute;n. Non &egrave; una scenografia: &egrave; proprio il titolare, che quella sera &egrave; in sala.</p>
+
+      <p>Ordini al cameriere, che te lo consiglia in italiano con l'accento di Siviglia. Ti porta prima una copa di tempranillo. Poi arriva il tavolone delle tapas, da dividere: bravas, croquetas, tortilla. Un pezzo di jam&oacute;n ib&eacute;rico su un piatto bianco con due gocce d'olio.</p>
+
+      <p>Quando chiedi la paella ti rispondono venticinque minuti. Non ti lamenti: aspetti e intanto bevi. Alle nove meno dieci la chitarra parte. &Egrave; flamenco, piano. Nessuno urla, nessuno cerca di coprirlo.</p>
+
+      <p>La paella arriva nella padella originale, fumante. La porzioni al tavolo. In fondo, attaccato alla padella, il <em>socarrat</em>. Lo recuperi col cucchiaio come insegna chi la paella la mangia da sempre.</p>
+
+      <p>Fine serata. Crema catalana caramellata davanti a te. Un bicchiere di jerez. Il cameriere che ti chiede se tutto bene, non per abitudine ma perch&eacute; lo vuole sapere. Esci alle undici e mezza, cammini verso i Fori sotto una luna di ottobre, e per cinque minuti ti sembra di essere a Siviglia.</p>
+    </div>
+
+    <div class="serata__sign">&mdash; Benvenuto da El Duende.</div>
+  </div>
+</section>
+
+<!-- ═══════════════════ BOOK ═══════════════════ -->
+<section class="book" id="book">
+  <div class="wrap book__layout">
+    <div class="book__left">
+      <div class="eyebrow" style="margin-bottom:24px">Prenota</div>
+      <h2>Vederti <em>stasera</em>?</h2>
+      <p>
+        Aperti dal marted&igrave; alla domenica, dalle 19:30 a mezzanotte.
+        Chiuso luned&igrave;. Prenota qui a fianco oppure chiamaci: in sala rispondiamo
+        tutti i giorni dalle 11:00 in poi.
       </p>
 
       <div class="book__info">
         <div class="info-row">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <div class="info-row__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
           <div>
             <b>Via del Boschetto 118</b>
-            <span>Rione Monti, 00184 Roma<br>A 5 minuti a piedi dal Colosseo</span>
+            <span>Rione Monti, 00184 Roma<br>Cinque minuti a piedi dal Colosseo</span>
           </div>
         </div>
 
         <div class="info-row">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.4 2.1L8 9.6a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.4c.9.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2z"/></svg>
+          <div class="info-row__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.4 2.1L8 9.6a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.4c.9.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2z"/></svg>
+          </div>
           <div>
             <b>+39 06 487 5950</b>
-            <span>Tutti i giorni dalle 11:00 alle 23:30</span>
+            <span>Tutti i giorni, 11:00&ndash;23:30</span>
           </div>
         </div>
 
         <div class="info-row">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          <div class="info-row__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          </div>
           <div>
             <b>Orari</b>
             <span>Marted&igrave;&ndash;Domenica &middot; 19:30&ndash;00:00<br>Chiuso luned&igrave;</span>
@@ -1221,9 +2295,11 @@ footer {
       </div>
     </div>
 
-    <form class="form" onsubmit="event.preventDefault();alert('Richiesta inviata! Ti richiamiamo entro un\\'ora.')">
-      <h3>Richiedi un tavolo</h3>
-      <p class="form__hint">Ti ricontattiamo entro un'ora per confermare.</p>
+    <form class="form" onsubmit="event.preventDefault();alert('Richiesta ricevuta. Ti richiamiamo entro un\\'ora per confermare.')">
+      <div class="form__head">
+        <small>Richiedi un tavolo</small>
+        <h3>Prenota la serata.</h3>
+      </div>
 
       <div class="form__field">
         <label for="nome">Nome e cognome</label>
@@ -1265,21 +2341,24 @@ footer {
         </div>
       </div>
 
-      <button type="submit" class="btn btn--primary">
+      <button type="submit" class="btn btn--gold">
         Prenota il tavolo
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
       </button>
+
+      <p class="form__disclaimer">Ti ricontattiamo entro un'ora per confermare.</p>
     </form>
   </div>
 </section>
 
-<!-- ═════════ FOOTER ═════════ -->
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
 <footer>
   <div class="wrap">
     <div class="foot__top">
-      <div>
-        <div class="foot__brand">El Duende<small>Ristorante spagnolo &middot; Roma</small></div>
-        <p>In via del Boschetto 118, nel cuore del Rione Monti, dal 2003. Cucina spagnola fatta da spagnoli, a cinque minuti dal Colosseo.</p>
+      <div class="foot__brand-wrap">
+        <div class="foot__brand">El Duende</div>
+        <small>Spagna, a Roma</small>
+        <p>Via del Boschetto 118, nel Rione Monti, dal 2003. Cucina spagnola fatta da spagnoli, a cinque minuti dal Colosseo.</p>
         <div class="social">
           <a href="#" aria-label="Instagram">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
@@ -1288,7 +2367,7 @@ footer {
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 22v-8h3l1-4h-4V8c0-1 .3-2 1.8-2H17V2.3S15.6 2 14.3 2C11.6 2 10 3.6 10 6.4V10H7v4h3v8z"/></svg>
           </a>
           <a href="#" aria-label="TripAdvisor">
-            <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="7" cy="12" r="3.5"/><circle cx="17" cy="12" r="3.5"/><circle cx="7" cy="12" r="1.5" fill="#1A120B"/><circle cx="17" cy="12" r="1.5" fill="#1A120B"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="7" cy="12" r="3.5"/><circle cx="17" cy="12" r="3.5"/><circle cx="7" cy="12" r="1.5" fill="#0D0806"/><circle cx="17" cy="12" r="1.5" fill="#0D0806"/></svg>
           </a>
         </div>
       </div>
@@ -1297,7 +2376,7 @@ footer {
         <h5>Il locale</h5>
         <ul>
           <li><a href="#storia">La nostra storia</a></li>
-          <li><a href="#menu">La cucina</a></li>
+          <li><a href="#cucina">La cucina</a></li>
           <li><a href="#ambiente">L'ambiente</a></li>
           <li><a href="#voci">Recensioni</a></li>
         </ul>
@@ -1330,6 +2409,18 @@ footer {
     </div>
   </div>
 </footer>
+
+<script>
+  (function() {
+    const nav = document.getElementById('nav');
+    const onScroll = () => {
+      if (window.scrollY > 60) nav.classList.add('scrolled');
+      else nav.classList.remove('scrolled');
+    };
+    document.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+</script>
 
 </body>
 </html>
